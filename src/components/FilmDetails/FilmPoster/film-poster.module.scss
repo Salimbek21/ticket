@@ -1,0 +1,367 @@
+.film_poster {
+	margin-bottom: 100px;
+
+	@media (max-width: 768px) {
+		margin-bottom: 60px;
+	}
+
+	@media (max-width: 490px) {
+		margin-bottom: 40px;
+	}
+
+	.film_poster_header {
+		font-size: 35px;
+		font-weight: 600;
+		line-height: 120%;
+		color: var(--color-text);
+
+		@media (max-width: 768px) {
+			font-size: 25px;
+		}
+	}
+
+	.daysContainer {
+			display: flex;
+			flex-direction: column;
+			margin-top: 20px;
+			margin-bottom: 40px;
+
+			@media (max-width: 768px) {
+				font-size: 25px;
+			}
+
+			@media (max-width: 520px) {
+				margin-bottom: 30px;
+			}
+
+			@media (max-width: 400px) {
+				margin-bottom: 20px;
+			}
+
+			.days_calendar {
+				display: flex;
+				align-items: center;
+				gap: 15px;
+				margin-top: 10px;
+
+				.day_box {
+					.day {
+						width: 5rem;
+						display: flex;
+						flex-direction: column;
+						gap: 5px;
+						padding: 8px;
+						border: 1px solid #e5e7eb;
+						border-radius: 6px;
+						cursor: pointer;
+						transition: 0.3s ease-in-out;
+
+						&.highlighted {
+							color: #f50f78;
+						}
+
+						&.selected {
+							background-color: #e5e7eb;
+						}
+
+						&:hover {
+							background-color: #e5e7eb;
+						}
+
+						&:active {
+							transform: none;
+							opacity: unset;
+						}
+
+						.day_date {
+							font-size: 16px;
+							font-weight: 600;
+							text-align: center;
+						}
+
+						.day_week {
+							font-size: 12px;
+							color: #6b7280;
+							text-transform: uppercase;
+
+							&.highlighted {
+								color: #f50f78;
+							}
+						}
+					}
+				}
+			}
+
+			@media (max-width: 700px) {
+				.days_calendar {
+					margin-top: 0;
+
+					.day_box {
+						width: 100%;
+
+						.day {
+							width: 100%;
+						}
+					}
+				}
+			}
+
+			@media (max-width: 480px) {
+				.days_calendar {
+					gap: 5px;
+
+					.day_box {
+						.day {
+							padding: 5px;
+
+							.day_date {
+								font-size: 14px;
+							}
+
+							.day_week {
+								font-size: 10px;
+							}
+						}
+					}
+				}
+			}
+
+			@media (max-width: 480px){
+				width: 100%;
+
+				.days_calendar {
+					overflow-x: scroll;
+					scrollbar-width: none;
+					-ms-overflow-style: none;
+					-webkit-mask-image: linear-gradient(
+						to right,
+						transparent,
+						#000 0%,
+						#000 90%,
+						transparent
+					);
+
+					&::-webkit-scrollbar {
+						display: none;
+					}
+
+					.day_box {
+						width: 100%;
+						.day {
+							width: 70px;
+
+							.day_date {
+								font-size: 14px;
+							}
+
+							.day_week {
+								font-size: 10px;
+							}
+						}
+					}
+				}
+			}
+
+
+		}
+
+	.film_poster_general {
+		display: flex;
+		flex-direction: column;
+		gap: 25px;
+
+		@media (max-width: 768px) {
+			gap: 10px;
+		}
+
+		.film_poster_info {
+			display: flex;
+			justify-content: space-between;
+			align-items: flex-start;
+			gap: 30px;
+			border-top: 1px solid #0f131d1a;
+			padding-top: 25px;
+
+			@media (max-width: 768px) {
+				flex-direction: column;
+				gap: 15px;
+				padding-top: 10px;
+			}
+
+			.info_left {
+				display: flex;
+				flex-direction: column;
+				gap: 18px;
+
+				.cinema_name {
+					font-size: 19px;
+					font-weight: 600;
+					line-height: 110%;
+					letter-spacing: -2%;
+					color: var(--color-text);
+				}
+
+				.cinema_address {
+					font-size: 16px;
+					font-weight: 400;
+					line-height: 100%;
+					letter-spacing: -1%;
+					color: #0f131d66;
+				}
+
+				@media (max-width: 768px) {
+					margin-bottom: 15px;
+					gap: 10px;
+
+					.cinema_name {
+						display: inline-block;
+						font-size: 15px;
+					}
+
+					.cinema_address {
+						font-size: 13px;
+					}
+				}
+			}
+
+			.info_right {
+				width: 100%;
+				display: grid;
+				grid-template-columns: repeat(5, 1fr);
+				gap: 10px;
+				flex-basis: 60%;
+
+				@media (max-width: 1200px) {
+					grid-template-columns: repeat(4, 1fr);
+				}
+
+				@media (max-width: 1000px) {
+					grid-template-columns: repeat(3, 1fr);
+				}
+
+				@media (max-width: 768px) {
+					gap: 5px;
+				}
+
+				.right_card {
+					border: 1px solid #0f131d1a;
+					border-radius: 6px;
+					cursor: pointer;
+					transition: 0.4s ease;
+
+					.card_top {
+						padding: 20px 15px;
+						border-bottom: 1px dashed #0f131d1a;
+						transition: 0.4s ease;
+
+						@media (max-width: 768px) {
+							padding: 10px;
+						}
+
+						.top_hall {
+							display: flex;
+							align-items: center;
+							margin-bottom: 5px;
+
+							.hall_num {
+								font-size: 16px;
+								font-weight: 400;
+								line-height: 100%;
+								letter-spacing: -1%;
+								color: var(--color-secondary);
+								margin-right: 7px;
+
+								@media (max-width: 768px) {
+									font-size: 10px;
+									font-weight: 500;
+								}
+							}
+						}
+
+						.hall_format {
+							font-size: 16px;
+							font-weight: 400;
+							line-height: 100%;
+							letter-spacing: -1%;
+							color: var(--color-secondary);
+							margin-bottom: 10px;
+
+							@media (max-width: 768px) {
+								font-size: 10px;
+								font-weight: 500;
+							}
+						}
+
+						.hall_price {
+							font-size: 16px;
+							font-weight: 500;
+							line-height: 100%;
+							letter-spacing: -1%;
+
+							@media (max-width: 768px) {
+								font-size: 10px;
+							}
+						}
+					}
+
+					.card_btn_time {
+						padding: 10px 15px;
+
+						.btn_time {
+							display: flex;
+							justify-content: center;
+							align-items: center;
+							font-size: 16px;
+							font-weight: 600;
+							line-height: 100%;
+							padding: 7px 20px 7px 20px;
+							color: #fff;
+							border-radius: 5px;
+							background: var(--color-main);
+						}
+
+						@media (max-width: 768px) {
+							padding: 0;
+
+							.btn_time {
+								font-size: 10px;
+								border-radius: 0;
+							}
+						}
+					}
+
+					&:hover {
+						border: 1px solid rgb(243, 121, 5);
+						background: rgb(254, 242, 230);
+
+						.card_top {
+							border-bottom: 1px dashed #f37905;
+						}
+					}
+				}
+			}
+		}
+
+		.film_poster_more_btn {
+			border-radius: 6px;
+			background: var(--color-light-bg);
+			padding: 15px 0;
+			text-align: center;
+
+			.more_btn {
+				width: 100%;
+				font-size: 16px;
+				font-weight: 500;
+				color: var(--color-text);
+			}
+
+			@media (max-width: 768px) {
+				padding: 12px 0;
+
+				.more_btn {
+					font-size: 14px;
+				}
+			}
+		}
+	}
+}

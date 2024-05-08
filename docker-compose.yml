@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  app:
+    image: khondamir0525/kinoticket-front:latest
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    restart: always

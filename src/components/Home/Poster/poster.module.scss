@@ -1,0 +1,539 @@
+.poster {
+	margin-bottom: 100px;
+
+	@media (max-width: 768px) {
+		margin-bottom: 60px;
+	}
+
+	@media (max-width: 490px) {
+		margin-bottom: 40px;
+	}
+
+	.poster_top {
+		display: flex;
+		flex-direction: column;
+		column-gap: 20px;
+		margin-bottom: 40px;
+
+		@media (max-width: 520px) {
+			margin-bottom: 30px;
+		}
+
+		@media (max-width: 400px) {
+			margin-bottom: 20px;
+		}
+
+		.poster_top_info {
+			display: flex;
+			justify-content: flex-start;
+			align-items: center;
+			gap: 50px;
+
+			.poster_header {
+				font-size: 35px;
+				font-weight: 600;
+				line-height: 120%;
+				color: var(--color-text);
+
+				@media (max-width: 768px) {
+					font-size: 25px;
+				}
+			}
+
+			.poster_choice {
+				position: relative;
+
+				.choice_btn {
+					display: grid;
+					grid-template-columns: 1fr max-content;
+					align-items: center;
+					gap: 10px;
+					width: 100%;
+					padding: 12px 20px;
+					font-size: 13px;
+					font-weight: 500;
+					letter-spacing: -0.01em;
+					text-align: left;
+					color: #fff;
+					cursor: pointer;
+					background: var(--color-text);
+					border-radius: 4px;
+
+					span {
+						overflow: hidden;
+						text-overflow: ellipsis;
+					}
+
+					svg {
+						display: inline-block;
+						width: 16px;
+						height: 16px;
+						object-fit: contain;
+						transform: rotate(0deg);
+						transition: transform ease-in-out 400ms;
+					}
+
+					&:active {
+						transform: none;
+						opacity: unset;
+					}
+				}
+
+				.cinema_list {
+					width: 100%;
+					position: absolute;
+					top: 45px;
+					left: 0;
+					width: 100%;
+					max-height: 256px;
+					display: flex;
+					flex-direction: column;
+					justify-content: flex-start;
+					align-items: flex-start;
+					list-style: none;
+					background: #fff;
+					border-radius: 5px;
+					box-shadow: 0px 10px 15px 0px rgba(0, 0, 0, 0.0784313725);
+					z-index: 1000;
+					opacity: 0;
+					pointer-events: none;
+					transition: opacity ease-in-out 400ms;
+
+					.item {
+						width: 100%;
+						display: block;
+						padding: 10px 2px 10px 20px;
+						cursor: pointer;
+
+						&:hover {
+							background: #f5f5f5;
+						}
+
+						.btn {
+							width: 100%;
+							display: flex;
+							justify-content: flex-start;
+							align-items: center;
+							gap: 10px;
+							height: unset;
+							padding: 0;
+							background: none;
+							border-radius: 0;
+							font-size: 13px;
+							font-weight: 400;
+							letter-spacing: -0.01em;
+							transition: color ease-in-out 400ms,
+								background-color ease-in-out 400ms;
+
+							&:active {
+								transform: none;
+								opacity: unset;
+							}
+
+							.checkbox {
+								position: relative;
+								display: inline-block;
+								width: 16px;
+								height: 16px;
+								border-radius: 50%;
+								border: 1px solid var(--color-text);
+								opacity: 0.1;
+								transition: opacity ease-in-out 400ms;
+
+								&::after {
+									content: "";
+									position: absolute;
+									top: 50%;
+									left: 50%;
+									display: inline-block;
+									width: 10px;
+									height: 10px;
+									border-radius: 50%;
+									background: var(--color-text);
+									opacity: 0;
+									transform: translate(-50%, -50%);
+									transition: opacity ease-in-out 400ms;
+								}
+							}
+						}
+
+						&.active {
+							.btn {
+								.checkbox {
+									opacity: 1;
+
+									&::after {
+										opacity: 1;
+									}
+								}
+							}
+						}
+					}
+				}
+
+				&.opened {
+					.choice_btn {
+						svg {
+							transform: rotate(180deg);
+						}
+					}
+
+					.cinema_list {
+						opacity: 1;
+						pointer-events: initial;
+					}
+				}
+
+				@media (max-width: 700px) {
+					width: 100%;
+				}
+			}
+		}
+
+		.daysContainer {
+			display: flex;
+			flex-direction: column;
+			margin-top: 20px;
+
+			.days_calendar {
+				display: flex;
+				align-items: center;
+				gap: 15px;
+				margin-top: 10px;
+
+				.day_box {
+					.day {
+						width: 5rem;
+						display: flex;
+						flex-direction: column;
+						gap: 5px;
+						padding: 8px;
+						border: 1px solid #e5e7eb;
+						border-radius: 6px;
+						cursor: pointer;
+						transition: 0.3s ease-in-out;
+
+						&.highlighted {
+							color: #f50f78;
+						}
+
+						&.selected {
+							background-color: #e5e7eb;
+						}
+
+						&:hover {
+							background-color: #e5e7eb;
+						}
+
+						&:active {
+							transform: none;
+							opacity: unset;
+						}
+
+						.day_date {
+							font-size: 16px;
+							font-weight: 600;
+							text-align: center;
+						}
+
+						.day_week {
+							font-size: 12px;
+							color: #6b7280;
+							text-transform: uppercase;
+
+							&.highlighted {
+								color: #f50f78;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		@media (max-width: 700px) {
+			.poster_top_info {
+				flex-direction: column;
+				align-items: flex-start;
+				gap: 15px;
+				margin-bottom: 10px;
+			}
+
+			.daysContainer {
+				.days_calendar {
+					margin-top: 0;
+
+					.day_box {
+						width: 100%;
+
+						.day {
+							width: 100%;
+						}
+					}
+				}
+			}
+		}
+
+		@media (max-width: 480px) {
+			.daysContainer {
+				.days_calendar {
+					gap: 5px;
+
+					.day_box {
+						.day {
+							padding: 5px;
+
+							.day_date {
+								font-size: 14px;
+							}
+
+							.day_week {
+								font-size: 10px;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		@media (max-width: 430px) {
+			.daysContainer {
+				width: 100%;
+				margin-bottom: 20px;
+
+				.days_calendar {
+					overflow-x: scroll;
+					scrollbar-width: none;
+					-ms-overflow-style: none;
+					-webkit-mask-image: linear-gradient(
+						to right,
+						transparent,
+						#000 0%,
+						#000 90%,
+						transparent
+					);
+
+					&::-webkit-scrollbar {
+						display: none;
+					}
+
+					.day_box {
+						width: 100%;
+						.day {
+							width: 70px;
+
+							.day_date {
+								font-size: 14px;
+							}
+
+							.day_week {
+								font-size: 10px;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	.poster_cards {
+		width: 100%;
+		display: grid;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		gap: 40px 30px;
+
+		.poster_card {
+			width: 100%;
+
+			.card_top {
+				position: relative;
+				display: block;
+				width: 100%;
+				height: 280px;
+				overflow: hidden;
+				margin-bottom: 20px;
+				border-radius: 8px;
+
+				.top_pic {
+					display: block;
+					width: 100%;
+					height: 100%;
+					background: var(--color-text);
+
+					img {
+						display: block;
+						width: 100%;
+						height: 100%;
+						object-fit: cover;
+					}
+				}
+			}
+
+			.card_bottom {
+				.bottom_name {
+					font-size: 19px;
+					font-weight: 600;
+					margin-bottom: 10px;
+					color: var(--color-text);
+					line-height: 110%;
+					letter-spacing: -0.38px;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+				}
+
+				.bottom_genres {
+					display: flex;
+					justify-content: flex-start;
+					align-items: center;
+					flex-wrap: wrap;
+					gap: 7px;
+					margin-bottom: 20px;
+					opacity: 0.4;
+
+					p {
+						color: var(--color-text);
+						font-size: 16px;
+						font-weight: 400;
+						line-height: 1;
+						letter-spacing: -0.16px;
+						text-transform: capitalize;
+					}
+
+					span {
+						display: inline-block;
+						width: 3px;
+						height: 3px;
+						background: #0f131d;
+						border-radius: 50%;
+					}
+				}
+
+				.poster_card_line {
+					height: 1px;
+					background: #e5e7eb;
+				}
+
+				.poster_card_info {
+					display: flex;
+					align-items: center;
+					gap: 5px;
+					font-size: 1rem;
+					font-weight: 500;
+					color: #6b7280;
+					margin-top: 8px;
+				}
+
+				// .bottom_time {
+				// 	display: inline-block;
+				// 	font-size: 14px;
+				// 	font-weight: 500;
+				// 	padding: 5px 10px;
+				// 	color: var(--color-main);
+				// 	border: 1px solid var(--color-main);
+				// 	border-radius: 500px;
+				// }
+			}
+		}
+
+		@media (max-width: 1070px) {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
+
+		@media (max-width: 768px) {
+			gap: 30px 15px;
+
+			.poster_card {
+				.card_top {
+					height: 260px;
+				}
+
+				.card_bottom {
+					.bottom_name {
+						font-size: 15px;
+					}
+
+					.bottom_genres {
+						margin-bottom: 12px;
+
+						p {
+							font-size: 13px;
+						}
+					}
+
+					.poster_card_info {
+						font-size: 13px;
+					}
+				}
+			}
+		}
+
+		@media (max-width: 575px) {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+
+		@media (max-width: 480px) {
+			grid-template-columns: repeat(1, minmax(0, 1fr));
+
+			.poster_card {
+				width: 100%;
+				display: flex;
+				align-items: flex-start;
+				gap: 15px;
+
+				.card_top {
+					flex-shrink: 0;
+					width: 90px;
+					height: 137.65px;
+					margin-bottom: 0;
+
+					.top_pic {
+						width: 90px;
+						height: 100%;
+
+						img {
+							width: 90%;
+						}
+					}
+				}
+
+				.card_bottom {
+					width: 100%;
+					max-width: 250px;
+
+					.bottom_name {
+						overflow: hidden;
+						display: -webkit-box;
+						-webkit-line-clamp: 2;
+						-webkit-box-orient: vertical;
+						text-overflow: ellipsis;
+						white-space: normal;
+						margin-bottom: 6px;
+					}
+
+					.bottom_genres {
+						margin-bottom: 5px;
+						p {
+							line-height: 1.5;
+						}
+					}
+				}
+			}
+		}
+
+		@media (max-width: 390px) {
+			.poster_card {
+				.card_bottom {
+					max-width: 200px;
+				}
+			}
+		}
+
+		@media (max-width: 330px) {
+			.poster_card {
+				.card_bottom {
+					max-width: 160px;
+				}
+			}
+		}
+	}
+}

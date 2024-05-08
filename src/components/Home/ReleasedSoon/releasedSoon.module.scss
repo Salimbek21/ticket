@@ -1,0 +1,238 @@
+.releasedsoon {
+	margin-bottom: 100px;
+
+	@media (max-width: 768px) {
+		margin-bottom: 60px;
+	}
+
+	@media (max-width: 490px) {
+		margin-bottom: 40px;
+	}
+
+	.releasedsoon_top {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 40px;
+
+		@media (max-width: 520px) {
+			margin-bottom: 30px;
+		}
+
+		@media (max-width: 400px) {
+			margin-bottom: 20px;
+		}
+
+		.releasedsoon_header {
+			font-size: 35px;
+			font-weight: 600;
+			line-height: 120%;
+			color: var(--color-text);
+		}
+
+		.releasedsoon_manage {
+			display: flex;
+			align-items: center;
+			gap: 5px;
+
+			.manage_btns {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				width: 100%;
+				height: 100%;
+				border: none;
+				border-radius: 5px;
+				background: #f9f9f9;
+				padding-top: 8px;
+				padding-bottom: 8px;
+
+				&.btn_next {
+					transform: rotate(180deg);
+				}
+			}
+		}
+	}
+
+	.releasedsoon_slider {
+		.releasedsoon_card {
+			.card_top {
+				position: relative;
+				display: block;
+				width: 100%;
+				height: 280px;
+				overflow: hidden;
+				margin-bottom: 20px;
+				border-radius: 8px;
+
+				.top_pic {
+					display: block;
+					width: 100%;
+					height: 100%;
+					background: var(--color-text);
+
+					img {
+						display: block;
+						width: 100%;
+						height: 100%;
+						object-fit: cover;
+					}
+				}
+
+				.top_rating {
+					position: absolute;
+					top: 15px;
+					left: 15px;
+					padding: 10px 15px;
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					gap: 7px;
+					background: var(--color-main);
+					border-radius: 4px;
+
+					.rating_icon {
+						display: inline-block;
+						width: 13.3px;
+						height: 14.06px;
+
+						svg {
+							display: block;
+							width: 100%;
+							height: 100%;
+							object-fit: contain;
+						}
+					}
+
+					.rating_text {
+						font-size: 16px;
+						font-weight: 500;
+						line-height: 100%;
+						color: #fff;
+					}
+				}
+			}
+
+			.card_bottom {
+				.bottom_name {
+					font-size: 19px;
+					font-weight: 600;
+					margin-bottom: 10px;
+					color: var(--color-text);
+					line-height: 110%;
+					letter-spacing: -0.38px;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+				}
+
+				.bottom_genres {
+					display: flex;
+					justify-content: flex-start;
+					align-items: center;
+					flex-wrap: wrap;
+					gap: 7px;
+					margin-bottom: 20px;
+					opacity: 0.4;
+
+					p {
+						color: var(--color-text);
+						font-size: 16px;
+						font-weight: 400;
+						letter-spacing: -0.16px;
+						text-transform: capitalize;
+					}
+
+					span {
+						display: inline-block;
+						width: 3px;
+						height: 3px;
+						background: #0f131d;
+						border-radius: 50%;
+					}
+				}
+
+				.bottom_time {
+					display: inline-block;
+					font-size: 14px;
+					font-weight: 500;
+					padding: 5px 10px;
+					color: var(--color-main);
+					border: 1px solid var(--color-main);
+					border-radius: 500px;
+				}
+			}
+		}
+	}
+
+	@media (max-width: 768px) {
+		.releasedsoon_top {
+			.releasedsoon_header {
+				font-size: 25px;
+			}
+
+			.releasedsoon_manage {
+				display: none;
+			}
+		}
+
+		.releasedsoon_slider {
+			.releasedsoon_card {
+				.card_top {
+					height: 260px;
+
+					.top_rating {
+						top: 10px;
+						left: 10px;
+						padding: 5px 10px;
+
+						.rating_icon {
+							width: 12px;
+							height: 11px;
+						}
+
+						.rating_text {
+							font-size: 13px;
+						}
+					}
+				}
+
+				.card_bottom {
+					.bottom_name {
+						font-size: 15px;
+					}
+
+					.bottom_genres {
+						p {
+							font-size: 13px;
+						}
+					}
+
+					.bottom_time {
+						font-size: 11px;
+					}
+				}
+			}
+		}
+	}
+
+	@media (max-width: 430px) {
+		.releasedsoon_slider {
+			.releasedsoon_card {
+				.card_top {
+					height: 240px;
+				}
+			}
+		}
+	}
+
+	@media (max-width: 360px) {
+		.releasedsoon_slider {
+			.releasedsoon_card {
+				.card_top {
+					height: 220px;
+				}
+			}
+		}
+	}
+}
