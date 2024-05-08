@@ -1,0 +1,45 @@
+name: kinoticket-front-deploy
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  REGISTRY: dockerhub.io
+  IMAGE_NAME: khondamir0525/kinoticket-front:latest
+
+jobs:
+    publish:
+        name: publish docker image
+        runs-on: ubuntu-latest
+
+        steps:
+        - uses: actions/checkout@v3
+        - name: Login to docker
+          run: |
+            echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{secrets.DOCKERHUB_USERNAME}} --password-stdin
+        - name: Build and Publish in docker hub
+          run: |
+            docker-compose build
+            docker-compose push
+
+
+    deploy:
+        needs: publish
+        name: deploy image in remote vps
+        runs-on: ubuntu-latest
+
+        steps:
+        - name: Login to vps and deploy
+          uses: appleboy/ssh-action@v0.1.3
+          with:
+            host: ${{secrets.VPS_IP}}
+            username: ${{secrets.VPS_USER}}
+            password: ${{ secrets.VPS_PASSWORD }}
+            port: ${{secrets.VPS_PORT}}
+            script: |
+              cd ${{ secrets.VPS_WORK_DIR }}
+              docker-compose pull
+              docker-compose up -d
