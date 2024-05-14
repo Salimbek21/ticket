@@ -21,149 +21,147 @@
 	}
 
 	.daysContainer {
+		display: flex;
+		flex-direction: column;
+		margin-top: 20px;
+		margin-bottom: 40px;
+
+		@media (max-width: 768px) {
+			font-size: 25px;
+		}
+
+		@media (max-width: 520px) {
+			margin-bottom: 30px;
+		}
+
+		@media (max-width: 400px) {
+			margin-bottom: 20px;
+		}
+
+		.days_calendar {
 			display: flex;
-			flex-direction: column;
-			margin-top: 20px;
-			margin-bottom: 40px;
+			align-items: center;
+			gap: 15px;
+			margin-top: 10px;
 
-			@media (max-width: 768px) {
-				font-size: 25px;
-			}
+			.day_box {
+				.day {
+					width: 5rem;
+					display: flex;
+					flex-direction: column;
+					gap: 5px;
+					padding: 8px;
+					border: 1px solid #e5e7eb;
+					border-radius: 6px;
+					cursor: pointer;
+					transition: 0.3s ease-in-out;
 
-			@media (max-width: 520px) {
-				margin-bottom: 30px;
-			}
+					&.highlighted {
+						color: #f50f78;
+					}
 
-			@media (max-width: 400px) {
-				margin-bottom: 20px;
-			}
+					&.selected {
+						background-color: #e5e7eb;
+					}
 
-			.days_calendar {
-				display: flex;
-				align-items: center;
-				gap: 15px;
-				margin-top: 10px;
+					&:hover {
+						background-color: #e5e7eb;
+					}
 
-				.day_box {
-					.day {
-						width: 5rem;
-						display: flex;
-						flex-direction: column;
-						gap: 5px;
-						padding: 8px;
-						border: 1px solid #e5e7eb;
-						border-radius: 6px;
-						cursor: pointer;
-						transition: 0.3s ease-in-out;
+					&:active {
+						transform: none;
+						opacity: unset;
+					}
+
+					.day_date {
+						font-size: 16px;
+						font-weight: 600;
+						text-align: center;
+					}
+
+					.day_week {
+						font-size: 12px;
+						color: #6b7280;
+						text-transform: uppercase;
 
 						&.highlighted {
 							color: #f50f78;
 						}
+					}
+				}
+			}
+		}
 
-						&.selected {
-							background-color: #e5e7eb;
-						}
+		@media (max-width: 700px) {
+			.days_calendar {
+				margin-top: 0;
 
-						&:hover {
-							background-color: #e5e7eb;
-						}
+				.day_box {
+					width: 100%;
 
-						&:active {
-							transform: none;
-							opacity: unset;
-						}
+					.day {
+						width: 100%;
+					}
+				}
+			}
+		}
+
+		@media (max-width: 480px) {
+			.days_calendar {
+				gap: 5px;
+
+				.day_box {
+					.day {
+						padding: 5px;
 
 						.day_date {
-							font-size: 16px;
-							font-weight: 600;
-							text-align: center;
+							font-size: 14px;
 						}
 
 						.day_week {
-							font-size: 12px;
-							color: #6b7280;
-							text-transform: uppercase;
-
-							&.highlighted {
-								color: #f50f78;
-							}
+							font-size: 10px;
 						}
 					}
 				}
 			}
-
-			@media (max-width: 700px) {
-				.days_calendar {
-					margin-top: 0;
-
-					.day_box {
-						width: 100%;
-
-						.day {
-							width: 100%;
-						}
-					}
-				}
-			}
-
-			@media (max-width: 480px) {
-				.days_calendar {
-					gap: 5px;
-
-					.day_box {
-						.day {
-							padding: 5px;
-
-							.day_date {
-								font-size: 14px;
-							}
-
-							.day_week {
-								font-size: 10px;
-							}
-						}
-					}
-				}
-			}
-
-			@media (max-width: 480px){
-				width: 100%;
-
-				.days_calendar {
-					overflow-x: scroll;
-					scrollbar-width: none;
-					-ms-overflow-style: none;
-					-webkit-mask-image: linear-gradient(
-						to right,
-						transparent,
-						#000 0%,
-						#000 90%,
-						transparent
-					);
-
-					&::-webkit-scrollbar {
-						display: none;
-					}
-
-					.day_box {
-						width: 100%;
-						.day {
-							width: 70px;
-
-							.day_date {
-								font-size: 14px;
-							}
-
-							.day_week {
-								font-size: 10px;
-							}
-						}
-					}
-				}
-			}
-
-
 		}
+
+		@media (max-width: 480px) {
+			width: 100%;
+
+			.days_calendar {
+				overflow-x: scroll;
+				scrollbar-width: none;
+				-ms-overflow-style: none;
+				-webkit-mask-image: linear-gradient(
+					to right,
+					transparent,
+					#000 0%,
+					#000 90%,
+					transparent
+				);
+
+				&::-webkit-scrollbar {
+					display: none;
+				}
+
+				.day_box {
+					width: 100%;
+					.day {
+						width: 70px;
+
+						.day_date {
+							font-size: 14px;
+						}
+
+						.day_week {
+							font-size: 10px;
+						}
+					}
+				}
+			}
+		}
+	}
 
 	.film_poster_general {
 		display: flex;
@@ -236,11 +234,15 @@
 				}
 
 				@media (max-width: 1000px) {
-					grid-template-columns: repeat(3, 1fr);
+					grid-template-columns: repeat(4, minmax(0, 1fr));
 				}
 
 				@media (max-width: 768px) {
 					gap: 5px;
+				}
+
+				@media (max-width: 400px) {
+					gap: 3px;
 				}
 
 				.right_card {
@@ -256,6 +258,10 @@
 
 						@media (max-width: 768px) {
 							padding: 10px;
+						}
+
+						@media (max-width: 768px) {
+							padding: 8px;
 						}
 
 						.top_hall {
@@ -298,8 +304,20 @@
 							line-height: 100%;
 							letter-spacing: -1%;
 
+							@media (max-width: 900px) {
+								font-size: 14px;
+							}
+
+							@media (max-width: 820px) {
+								font-size: 12px;
+							}
+
 							@media (max-width: 768px) {
 								font-size: 10px;
+							}
+
+							@media (max-width: 400px) {
+								font-size: 8px;
 							}
 						}
 					}
@@ -345,21 +363,20 @@
 		.film_poster_more_btn {
 			border-radius: 6px;
 			background: var(--color-light-bg);
-			padding: 15px 0;
 			text-align: center;
 
 			.more_btn {
 				width: 100%;
 				font-size: 16px;
 				font-weight: 500;
+				padding: 15px 0;
 				color: var(--color-text);
 			}
 
 			@media (max-width: 768px) {
-				padding: 12px 0;
-
 				.more_btn {
 					font-size: 14px;
+					padding: 12px 0;
 				}
 			}
 		}

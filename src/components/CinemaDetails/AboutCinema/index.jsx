@@ -58,20 +58,23 @@ const AboutCinema = ({ data }) => {
 										}}
 									>
 										{hall.places.map((place, idx) => (
-											<>
-												<span
-													key={idx}
-													style={{
-														gridColumn: `${place.fromColumn} / ${place.toColumn}`,
-														gridRow: `${place.fromRow} / ${place.toRow}`,
-													}}
-												></span>
-												{/* <div>
-													<span>Экран</span>
-													<ScreenIcon />
-												</div> */}
-											</>
+											<span
+												key={idx}
+												style={{
+													gridColumn: `${place.fromColumn} / ${place.toColumn}`,
+													gridRow: `${place.fromRow} / ${place.toRow}`,
+												}}
+											></span>
 										))}
+										<div
+											style={{
+												gridColumn: `${hall.screenFromColumn} / ${hall.screenToColumn}`,
+												gridRow: `${hall.screenFromRow} / ${hall.screenToRow}`,
+											}}
+										>
+											<span>Экран</span>
+											<ScreenIcon />
+										</div>
 									</div>
 								</div>
 							))}

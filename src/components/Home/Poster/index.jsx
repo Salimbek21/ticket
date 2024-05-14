@@ -77,6 +77,16 @@ const Poster = () => {
 		setOpenDropdown(!openDropdown);
 	};
 
+	const handleItemClick = (id) => {
+		if (id === selectedItemId) {
+			setSelectedItemId(null);
+		} else {
+			setSelectedItemId(id);
+		}
+
+		setOpenDropdown(false);
+	};
+
 	const handleCinemaSelect = (cinemaName) => {
 		setSelectedCinema(cinemaName);
 		dispatch(filmsThunk({ cinemaName, date: "2024-04-22" }));
@@ -160,41 +170,46 @@ const Poster = () => {
 					</div>
 				</div>
 				<div className={cls.poster_cards}>
-					{filmsData.items &&
-						filmsData.items.map((item) => {
-							return (
-								<Link
-									key={item.id}
-									className={cls.poster_card}
-									href="/film/filmdetailid"
-								>
-									<div className={cls.card_top}>
-										<div className={cls.top_pic}>
-											<Image
-												src={`https://kinoticket.uz${item?.picturePath}`}
-												alt="Poster image"
-												layout="fill"
-											/>
-										</div>
+					{selectedCinema && filmsData?.items?.length > 0 ? (
+						<div className={cls.no_movie}>С этим сеансом не найдено</div>
+					) : (
+						filmsData.items?.map((item) => (
+							<Link
+							className={cls.poster_card}
+							key={item.id}
+								href={{
+									pathname: "/film/[id]",
+								}}
+								as={`/film/${item.id}`}
+								title={item.name}
+							>
+								<div className={cls.card_top}>
+									<div className={cls.top_pic}>
+										<Image
+											src={`https://kinoticket.uz${item?.picturePath}`}
+											alt="Poster image"
+											layout="fill"
+										/>
 									</div>
-									<div className={cls.card_bottom}>
-										<div className={cls.bottom_name}>{item.name}</div>
+								</div>
+								<div className={cls.card_bottom}>
+									<div className={cls.bottom_name}>{item.name}</div>
 
-										<div className={cls.bottom_genres}>
-											<p>{item.genres.join(" • ")}</p>
-										</div>
-										<div className={cls.poster_card_line}></div>
-										<div className={cls.poster_card_info}>
-											<ExclamationIcon />
-											<span>
-												{item.sessionsCount} сеансов в {item.cinemasCount}{" "}
-												кинотеатрах
-											</span>
-										</div>
+									<div className={cls.bottom_genres}>
+										<p>{item.genres.join(" • ")}</p>
 									</div>
-								</Link>
-							);
-						})}
+									<div className={cls.poster_card_line}></div>
+									<div className={cls.poster_card_info}>
+										<ExclamationIcon />
+										<span>
+											{item.sessionsCount} сеансов в {item.cinemasCount}{" "}
+											кинотеатрах
+										</span>
+									</div>
+								</div>
+							</Link>
+						))
+					)}
 				</div>
 			</div>
 		</div>

@@ -3,13 +3,14 @@ import { filmsThunk } from "./filmsThunk";
 
 const initialState = {
   films: [],
+  selectedFilms: null,
   isLoading: true,
   status: null,
   error: null,
 };
 
 const filmsSlice = createSlice({
-  name: "films",
+  name: "sliders/films",
   initialState,
   reducers: {},
   extraReducers: {
@@ -20,6 +21,7 @@ const filmsSlice = createSlice({
       state.films = action.payload.data;
       state.isLoading = false;
       state.status = "fulfilled";
+      state.selectedFilms = action.payload.data.items;
     },
   },
 });

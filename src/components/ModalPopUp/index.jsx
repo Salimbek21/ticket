@@ -1,73 +1,62 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import cls from "./modal-popup.module.scss";
-
-import { redirect } from "next/navigation";
+import { Cookies } from "react-cookie";
 import { useRouter } from "next/router";
-import { loginAuth } from "@/store/auth/loginThunk";
-import { useDispatch, useSelector } from "react-redux";
 import { CancelLogo } from "../svg";
-import axios from "axios";
-import { apiLogin } from "@/api/auth";
-import { ok } from "@/ui/tostify";
+import { apiSignUp } from "@/api/auth";
+import { ok, errorMessage } from "@/ui/tostify";
+import { jwtDecode } from "jwt-decode";
+import { useDispatch, useSelector } from "react-redux";
+import { loginThunk } from "@/store/auth/login/loginThunk";
 
 const ModalPopUp = ({ onClose }) => {
+  const router = useRouter();
+  const cookies = new Cookies();
+  const dispatch = useDispatch();
+  const loginData = useSelector((state) => state.login);
+
   const [activeTab, setActiveTab] = useState("login");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
-  const [verificationCode, setVerificationCode] = useState("");
-  const router = useRouter();
 
-  const dispatch = useDispatch();
-  const access_token = useSelector((state) => state?.login);
-  const handleLogin = () => {
-    const form = {
+  const [phoneNumberSignUp, setPhoneNumberSignUp] = useState("");
+  const [passwordSignUp, setPasswordSignUp] = useState("");
+  const [email, setEmail] = useState("");
+
+  const handleLogin = (event) => {
+    const loginForm = {
       phone: phoneNumber,
       password: password,
     };
-    dispatch(loginAuth(form));
-
-    if (phoneNumber && password) {
-    } else {
-      alert("Please fill in all fields.");
-    }
+    dispatch(loginThunk(loginForm));
   };
 
-  const handleSignup = () => {
-    // Signup logic
-    if (phoneNumber && email) {
-      setActiveTab("verify");
-    } else {
-      alert("Please fill in all fields.");
-    }
-  };
-
-  const handleVerify = () => {
-    // Verification logic
-    if (verificationCode) {
+  useEffect(() => {
+    if (loginData?.data?.succeeded) {
       router.push("/account/personal");
       onClose();
-    } else {
-      alert("Please enter the verification code.");
+    }
+  }, [loginData.data?.data?.token]);
+
+  const handleSignup = async () => {
+    const signUpForm = {
+      phone: phoneNumberSignUp,
+      password: passwordSignUp,
+      email: email,
+    };
+
+    try {
+      const res = await apiSignUp(signUpForm);
+      if (res.data?.succeeded == true) {
+        ok("Вы успешно авторизовались!");
+        setActiveTab("login");
+      }
+      return res;
+    } catch (error) {
+      console.error(error);
+      errorMessage(error.data?.message);
     }
   };
-
-  //   const formatPhoneNumber = (input) => {
-  //     let numbers = phoneNumber.replace(/\D/g, "");
-
-  //     let countryCode = numbers.slice(0, 2);
-  //     let areaCode = numbers.slice(2, 5);
-  //     let partOne = numbers.slice(5, 7);
-  //     let partTwo = numbers.slice(7, 9);
-
-  //     let formattedNumber = countryCode;
-  //     if (areaCode.length > 0) formattedNumber += " " + areaCode;
-  //     if (partOne.length > 0) formattedNumber += " " + partOne;
-  //     if (partTwo.length > 0) formattedNumber += " " + partTwo;
-  //     console.log(formattedNumber, "formattedNumber");
-  //     setPhoneNumber(formattedNumber);
-  //     return formattedNumber;
-  //   };
 
   return (
     <div className={cls.modal_wrapper}>
@@ -75,6 +64,7 @@ const ModalPopUp = ({ onClose }) => {
         <button onClick={onClose} className={cls.popup_close}>
           <CancelLogo />
         </button>
+        {/* {suc} */}
         <div className={cls.tabs}>
           <label
             className={`${activeTab === "login" ? cls.active : ""} ${
@@ -119,12 +109,17 @@ const ModalPopUp = ({ onClose }) => {
                     placeholder="*****"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    onKeyPress={(event) => {
+                      if (event.key === "Enter") {
+                        handleLogin();
+                      }
+                    }}
                   />
                 </div>
               </div>
             </div>
             <div className={cls.content_bottom}>
-              <button className={cls.bottom_btn} onClick={handleLogin}>
+              <button className={cls.bottom_btn} onClick={() => handleLogin()}>
                 Войти
               </button>
               <div className={cls.bottom_ps}>
@@ -133,6 +128,7 @@ const ModalPopUp = ({ onClose }) => {
             </div>
           </div>
         )}
+
         {activeTab === "signup" && (
           <div className={cls.tabContent}>
             <div className={cls.tabContent_inputs}>
@@ -144,8 +140,8 @@ const ModalPopUp = ({ onClose }) => {
                     id="phone-input"
                     type="text"
                     placeholder="00 000 00 00"
-                    value={phoneNumber}
-                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    value={phoneNumberSignUp}
+                    onChange={(e) => setPhoneNumberSignUp(e.target.value)}
                   />
                 </div>
               </div>
@@ -161,10 +157,27 @@ const ModalPopUp = ({ onClose }) => {
                   />
                 </div>
               </div>
+              <div className={cls.inputs_item}>
+                <label htmlFor="psw-input">Пароль</label>
+                <div className={cls.item_input}>
+                  <input
+                    id="psw-input"
+                    type="password"
+                    placeholder="*****"
+                    value={passwordSignUp}
+                    onChange={(e) => setPasswordSignUp(e.target.value)}
+                    onKeyPress={(event) => {
+                      if (event.key === "Enter") {
+                        handleSignup();
+                      }
+                    }}
+                  />
+                </div>
+              </div>
             </div>
             <div className={cls.content_bottom}>
               <button className={cls.bottom_btn} onClick={handleSignup}>
-                Получить пароль
+                Зарегистрироваться
               </button>
               <div className={cls.bottom_ps}>
                 <label htmlFor="bottom_reset">
@@ -175,7 +188,8 @@ const ModalPopUp = ({ onClose }) => {
             </div>
           </div>
         )}
-        {activeTab === "verify" && (
+
+        {/* {activeTab === "verify" && (
           <div className={cls.tabContent}>
             <div className={cls.tabContent_inputs}>
               <div className={cls.inputs_item}>
@@ -199,7 +213,7 @@ const ModalPopUp = ({ onClose }) => {
               </div>
             </div>
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );

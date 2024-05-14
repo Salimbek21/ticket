@@ -1,7 +1,7 @@
 .footer_wrapper {
 	width: 100%;
 	padding: 120px 0 60px;
-	background: var(--color-text);
+	background: var(--color-main);
 
 	@media (max-width: 768px) {
 		padding: 120px 0 60px;
@@ -119,6 +119,7 @@
 			display: flex;
 			align-items: center;
 			gap: 20px;
+			margin-left: auto;
 		}
 
 		@media (max-width: 768px) {
@@ -136,6 +137,10 @@
 				a {
 					font-size: 12px;
 				}
+			}
+
+			.bottom_pay {
+				margin-left: 0;
 			}
 		}
 	}

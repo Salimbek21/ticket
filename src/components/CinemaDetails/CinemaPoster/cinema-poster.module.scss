@@ -158,7 +158,12 @@
 				}
 
 				@media (max-width: 768px) {
+					grid-template-columns: repeat(4, minmax(0, 1fr));
 					gap: 5px;
+				}
+
+				@media (max-width: 400px) {
+					gap: 3px;
 				}
 
 				.right_card {
@@ -174,6 +179,10 @@
 
 						@media (max-width: 768px) {
 							padding: 10px;
+						}
+
+						@media (max-width: 400px) {
+							padding: 8px;
 						}
 
 						.top_hall {
@@ -216,8 +225,20 @@
 							line-height: 100%;
 							letter-spacing: -1%;
 
+							@media (max-width: 900px) {
+								font-size: 14px;
+							}
+
+							@media (max-width: 820px) {
+								font-size: 12px;
+							}
+
 							@media (max-width: 768px) {
 								font-size: 10px;
+							}
+
+							@media (max-width: 400px) {
+								font-size: 8px;
 							}
 						}
 					}
@@ -266,20 +287,19 @@
 			align-items: center;
 			border-radius: 6px;
 			background: var(--color-light-bg);
-			padding: 15px 12px;
 
 			.more_btn {
 				width: 100%;
 				font-size: 16px;
 				font-weight: 500;
+				padding: 15px 12px;
 				color: var(--color-text);
 			}
 
 			@media (max-width: 768px) {
-				padding: 12px 0;
-
 				.more_btn {
 					font-size: 14px;
+					padding: 12px 0;
 				}
 			}
 		}

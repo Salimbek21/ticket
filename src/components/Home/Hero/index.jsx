@@ -22,7 +22,7 @@ const Hero = () => {
     dispatch(
       sliders({
         index: 1,
-        size: 10,
+        size: 10
       })
     );
   }, []);
@@ -76,7 +76,7 @@ const Hero = () => {
           slidesPerView={slidesPerView}
           navigation={{
             prevEl: `.${cls.btn_prev}`,
-            nextEl: `.${cls.btn_next}`,
+            nextEl: `.${cls.btn_next}`
           }}
           onNavigationPrev={() => {
             setIsOpenPopUp(false);
@@ -89,12 +89,11 @@ const Hero = () => {
           loop={true}
           autoplay={{
             delay: 5000,
-            disableOnInteraction: false,
+            disableOnInteraction: false
           }}
         >
           {slidersData?.map((item) => (
             <SwiperSlide key={item.film.id}>
-    
               <div className={cls.cover_item}>
                 <div className={cls.cover_item_top}>
                   <div className={cls.cover_item_top_pic}>
@@ -104,10 +103,7 @@ const Hero = () => {
                       alt="Movie banner"
                     />
                   </div>
-                  <button
-                    className={cls.cover_item_play_btn}
-                    onClick={() => openPopUp(item)}
-                  >
+                  <button className={cls.cover_item_play_btn} onClick={() => openPopUp(item)}>
                     <span>
                       <PlayIcon />
                     </span>
@@ -116,9 +112,7 @@ const Hero = () => {
                     <span className={cls.cover_item_rating_icon}>
                       <RatingMarkLogo />
                     </span>
-                    <span className={cls.cover_item_rating_text}>
-                      {item?.film?.rating}
-                    </span>
+                    <span className={cls.cover_item_rating_text}>{item?.film?.rating}</span>
                   </div>
                 </div>
                 <div className={cls.cover_item_bottom}>
@@ -130,7 +124,7 @@ const Hero = () => {
                           <span>{item?.film?.premiereDateUzbekistan}</span>
                           <span>{item?.film?.ratingMPAA}</span>
                         </div>
-                        {item.film.genres.slice(0, 2).map((genreItem,i) => (
+                        {item.film.genres.slice(0, 2).map((genreItem, i) => (
                           <div key={i} className={cls.desc_genres}>
                             <p>{genreItem}</p>
                           </div>
@@ -139,18 +133,22 @@ const Hero = () => {
                     </div>
                   </div>
                   <div className={cls.bottom_manage}>
-                    <Link className={cls.manage_more} href="/film/filmdetailid">
+                    <Link
+                      className={cls.manage_more}
+                      key={item.id}
+                      href={{
+                        pathname: "/film/[id]"
+                      }}
+                      as={`/film/${item.film.id}`}
+                      title={item.film.name}
+                    >
                       <span>Подробнее</span>
                     </Link>
                     <div className={cls.manage_btns}>
-                      <button
-                        className={`${cls.manage_btn} ${cls.btn_prev}`}
-                      >
+                      <button className={`${cls.manage_btn} ${cls.btn_prev}`}>
                         <ArrowLeftIcon />
                       </button>
-                      <button
-                        className={`${cls.manage_btn} ${cls.btn_next}`}
-                      >
+                      <button className={`${cls.manage_btn} ${cls.btn_next}`}>
                         <ArrowLeftIcon />
                       </button>
                     </div>
@@ -161,13 +159,7 @@ const Hero = () => {
           ))}
         </Swiper>
       </div>
-      {openPopUp && (
-        <TrailerPopUp
-          iframe={iframe}
-          isOpen={isOpenPopUp}
-          onClose={closePopUp}
-        />
-      )}
+      {openPopUp && <TrailerPopUp iframe={iframe} isOpen={isOpenPopUp} onClose={closePopUp} />}
     </>
   );
 };

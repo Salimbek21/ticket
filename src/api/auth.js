@@ -26,9 +26,18 @@ import { httpPost } from ".";
 
 export const apiLogin = (params) => {
   return httpPost({
-      url: '/account/login',
-      data: {
-          ...params
-      }
-  })
-}
+    url: "/account/login",
+    data: {
+      ...params,
+    },
+  });
+};
+
+export const apiSignUp = (params) => {
+  return httpPost({
+    url: "/account/register",
+    data: {
+      ...params,
+    },
+  });
+};

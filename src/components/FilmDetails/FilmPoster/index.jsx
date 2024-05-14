@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import cls from "./film-poster.module.scss";
 import PaymentsModal from "@/components/PaymentsModal";
+import { useDispatch, useSelector } from "react-redux";
 
 const daysOfWeek = ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"];
 const months = [
@@ -19,12 +20,15 @@ const months = [
 	"декабрь",
 ];
 
-const FilmPoster = () => {
+const FilmPoster = ({ data1 }) => {
+	console.log(data1, "Film details data 1 ");
+	const dispatch = useDispatch();
 	const [paymentModal, setPaymentModal] = useState(false);
 	const [dates, setDates] = useState([]);
 	const [selectedDate, setSelectedDate] = useState("Сегодня");
 	const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
-	
+	const [films, setFilms] = useState([]);
+
 	const handleOpenModal = () => {
 		setPaymentModal(true);
 	};
@@ -108,34 +112,32 @@ const FilmPoster = () => {
 					</div>
 				</div>
 				<div className={cls.film_poster_general}>
-					<div className={cls.film_poster_info}>
-						<div className={cls.info_left}>
-							<Link href="#" className={cls.cinema_name}>
-								Parus Cinema
-							</Link>
-							<div className={cls.cinema_address}>обводная ул. Нурафшон, 4</div>
-						</div>
-						<div className={cls.info_right}>
-							{Array.from({ length: 8 }).map((_, index) => (
-								<div
-									key={index}
-									className={cls.right_card}
-									onClick={handleOpenModal}
-								>
-									<div className={cls.card_top}>
-										<div className={cls.top_hall}>
-											<div className={cls.hall_num}>Зал {index + 1}</div>
+					{data1.map((cinema, index) => (
+						<div className={cls.film_poster_info}>
+							<div className={cls.info_left}>
+								<div className={cls.cinema_name}>{cinema.name}</div>
+								<div className={cls.cinema_address}>{cinema.address}</div>
+							</div>
+							<div className={cls.info_right}>
+								{cinema.sessions.map((session, sessionIndex) => (
+									<div className={cls.right_card} onClick={handleOpenModal}>
+										<div className={cls.card_top}>
+											<div className={cls.top_hall}>
+												<div className={cls.hall_num}>{session.hallName}</div>
+											</div>
+											<div className={cls.hall_format}>{session.format}</div>
+											<div className={cls.hall_price}>
+												{session.ticketPrice} сум
+											</div>
 										</div>
-										<div className={cls.hall_format}>2D</div>
-										<div className={cls.hall_price}>60 000 сум</div>
+										<div className={cls.card_btn_time}>
+											<div className={cls.btn_time}>{session.showTime}</div>
+										</div>
 									</div>
-									<div className={cls.card_btn_time}>
-										<div className={cls.btn_time}>10:00</div>
-									</div>
-								</div>
-							))}
+								))}
+							</div>
 						</div>
-					</div>
+					))}
 					<div className={cls.film_poster_more_btn}>
 						<button className={cls.more_btn}>Показать еще</button>
 					</div>

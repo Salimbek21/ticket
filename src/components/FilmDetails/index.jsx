@@ -1,15 +1,17 @@
-import Premieres from "../Home/Premieres";
-import AboutFilm from "./AboutFilm";
+import React, { useEffect, useState } from "react";
 import FilmHero from "./FilmHero";
 import FilmPoster from "./FilmPoster";
+import AboutFilm from "./AboutFilm";
+import Premieres from "../Home/Premieres";
+import BASE_URL from "@/api/url";
 
-const FilmDetails = () => {
+const FilmDetails = ({ data, data1 }) => {
 	return (
 		<>
-			<FilmHero />
-			<FilmPoster />
-			<AboutFilm />
-			<Premieres />
+			<FilmHero data={data} />
+			<FilmPoster data1={data1} />
+			<AboutFilm data={data} />
+			<Premieres data={data} />
 		</>
 	);
 };

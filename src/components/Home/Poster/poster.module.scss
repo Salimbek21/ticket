@@ -102,7 +102,6 @@
 					.item {
 						width: 100%;
 						display: block;
-						padding: 10px 2px 10px 20px;
 						cursor: pointer;
 
 						&:hover {
@@ -116,7 +115,7 @@
 							align-items: center;
 							gap: 10px;
 							height: unset;
-							padding: 0;
+							padding: 10px 2px 10px 20px;
 							background: none;
 							border-radius: 0;
 							font-size: 13px;

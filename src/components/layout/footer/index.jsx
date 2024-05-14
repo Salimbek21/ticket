@@ -3,7 +3,7 @@ import cls from "./footer.module.scss";
 import {
 	ClickIcon,
 	InstagramIcon,
-	LogoIcon,
+	LogoIconWhite,
 	PaymeIcon,
 	TelegramIcon,
 	UzumIcon,
@@ -16,7 +16,7 @@ const Footer = () => {
 				<div className={cls.footer_top}>
 					<div className={cls.top_logo}>
 						<Link href="/">
-							<LogoIcon />
+							<LogoIconWhite />
 						</Link>
 					</div>
 					<div className={cls.top_nav}>

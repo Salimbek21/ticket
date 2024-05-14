@@ -11,8 +11,9 @@ import pandaImg from "/public/images/panda.jpeg";
 import pandaImg1 from "/public/images/panda1.jpg";
 import Link from "next/link";
 import { RatingMarkLogo, TicketIcon } from "@/components/svg";
+import BASE_URL, { BASE_URL_IMAGE } from "@/api/url";
 
-const FilmHero = () => {
+const FilmHero = ({ data }) => {
 	const [thumbsSwiper, setThumbsSwiper] = useState(null);
 	const [spaceBetween, setSpaceBetween] = useState(10);
 
@@ -55,11 +56,16 @@ const FilmHero = () => {
 						}}
 						className={cls.gallery_window}
 					>
-						{Array.from({ length: 8 }).map((_, index) => {
+						{data.frames?.map((item, i) => {
 							return (
 								<SwiperSlide className={cls.gallery_swiper_slide}>
 									<div className={cls.window_pic}>
-										<Image src={pandaImg} alt="Detail Image" />
+										<Image
+											src={`${BASE_URL_IMAGE}/${item?.picturePath}`}
+											alt={`Film ${item.name} Image`}
+											width={400}
+											height={400}
+										/>
 									</div>
 								</SwiperSlide>
 							);
@@ -73,11 +79,16 @@ const FilmHero = () => {
 						modules={[Thumbs, Autoplay, EffectFade, FreeMode]}
 						className={cls.gallery_preview}
 					>
-						{Array.from({ length: 8 }).map((_, index) => {
+						{data.frames.map((item, i) => {
 							return (
 								<SwiperSlide className={cls.gallery_swiper_slide}>
 									<div className={cls.window_pic}>
-										<Image src={pandaImg} alt="Detail Image" />
+										<Image
+											src={`${BASE_URL_IMAGE}/${item.picturePath}`}
+											alt={`Film ${item.name} Image`}
+											width={400}
+											height={400}
+										/>
 									</div>
 								</SwiperSlide>
 							);
@@ -85,13 +96,13 @@ const FilmHero = () => {
 					</Swiper>
 				</div>
 				<div className={cls.details_info}>
-					<div className={cls.info_title}>Кунг фу панда 2</div>
-					<div className={cls.info_title_en}>Kung fu panda</div>
+					<div className={cls.info_title}>{data.name}</div>
+					<div className={cls.info_title_en}>{data.nameEn}</div>
 					<div className={cls.info_rating}>
 						<span className={cls.info_rating_icon}>
 							<RatingMarkLogo />
 						</span>
-						<span className={cls.info_rating_value}>7.0</span>
+						<span className={cls.info_rating_value}>{data.rating}</span>
 					</div>
 					<div className={cls.info_pay_btn}>
 						<Link className={cls.info_pay_link} href="#poster">
@@ -102,19 +113,14 @@ const FilmHero = () => {
 						</Link>
 					</div>
 					<div className={cls.info_shorts}>
-						<p>2016</p>
+						<p>{data.premiereDateUzbekistan.split("/")[2]}</p>
 						<span></span>
-						<p>5+</p>
+						<p>{data.ratingMPAA}</p>
 						<span></span>
-						<p>Мультфильм</p>
+						<p>{data.genres.join(" • ")}</p>
 					</div>
 					<div className={cls.info_desc}>
-						Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam
-						reiciendis, inventore iste fugiat aut nesciunt impedit nemo, libero
-						eos maxime autem debitis mollitia reprehenderit modi cupiditate.
-						Quibusdam consequatur voluptatibus placeat atque cum beatae, quod
-						vel sit soluta pariatur suscipit harum, minus eum tempore ut
-						expedita debitis iste. Dolores, iste commodi?
+						<p>{data.announce}</p>
 					</div>
 				</div>
 			</div>

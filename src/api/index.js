@@ -1,7 +1,7 @@
 import axios from "axios";
 import BASE_URL from "./url";
 
-import Cookies from "universal-cookie";
+import { Cookies } from "react-cookie";
 
 const providerClient = axios.create({
   baseURL: `${BASE_URL}`,
@@ -10,7 +10,8 @@ const providerClient = axios.create({
 providerClient.interceptors.request.use(
   (config) => {
     const cookie = new Cookies();
-    const access_token = localStorage.getItem("access_token");
+    const access_token = cookie.get("accessToken");
+
     if (access_token) {
       config.headers["Authorization"] = "Bearer " + access_token;
     }
