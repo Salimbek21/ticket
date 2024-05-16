@@ -186,7 +186,7 @@ const Poster = () => {
 								<div className={cls.card_top}>
 									<div className={cls.top_pic}>
 										<Image
-											src={`https://kinoticket.uz${item?.picturePath}`}
+											src={`http://185.196.213.181:32790${item?.picturePath}`}
 											alt="Poster image"
 											layout="fill"
 										/>
