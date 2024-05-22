@@ -9,7 +9,7 @@ const FilmDetails = ({ data, data1 }) => {
 	return (
 		<>
 			<FilmHero data={data} />
-			<FilmPoster data1={data1} />
+			<FilmPoster data1={data1} data={data} />
 			<AboutFilm data={data} />
 			<Premieres data={data} />
 		</>

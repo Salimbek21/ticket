@@ -13,8 +13,11 @@ import cls from "./payments-modal.module.scss";
 import pandaImg from "/public/images/panda.jpeg";
 import Link from "next/link";
 import Seat from "./Seat";
+import { BASE_URL_IMAGE } from "@/api/url";
 
-const PaymentsModal = ({ onClose }) => {
+const PaymentsModal = ({ onClose, data1, data }) => {
+	console.log(data, "data modal pop up test");
+	console.log(data1, "data1 modal pop up");
 	const [currentStep, setCurrentStep] = useState(1);
 	const [phoneNumber, setPhoneNumber] = useState("");
 	const [activeButton, setActiveButton] = useState(null);
@@ -94,18 +97,31 @@ const PaymentsModal = ({ onClose }) => {
 				<div className={cls.cont}>
 					<div className={cls.main_info}>
 						<div className={cls.info}>
-							<div className={cls.pic}>
-								<Image src={pandaImg} alt="Order image" />
-							</div>
-							<div className={cls.text}>
-								<div className={cls.film_name}>Kung fu panda 1</div>
-								<div className={cls.text_info}>
-									<p>Next Cinema</p>
-									<span></span>
-									<p>ЗАЛ 3</p>
-									<span></span>
-									<p>3D</p>
+							{data.trailers?.map((img, i) => (
+								<div className={cls.pic} key={i}>
+									<Image
+										src={`${BASE_URL_IMAGE}/${img?.picturePath}`}
+										alt={`${data.name} Image`}
+										width={400}
+										height={400}
+									/>
 								</div>
+							))}
+							<div className={cls.text}>
+								<div className={cls.film_name}>{data.name}</div>
+								{data1?.map((item, i) => (
+									<div key={i} className={cls.text_info}>
+										<p>{item.name}</p>
+										<span></span>
+										{item.sessions.map((session, i) => (
+											<>
+												<p>{session.hallName}</p>
+												<span></span>
+												<p>{session.format}</p>
+											</>
+										))}
+									</div>
+								))}
 							</div>
 						</div>
 					</div>

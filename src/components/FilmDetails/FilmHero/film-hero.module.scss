@@ -34,6 +34,46 @@
 						object-fit: cover;
 					}
 				}
+
+				.cover_item_play_btn {
+					position: absolute;
+					top: 0;
+					left: 0;
+					width: 100%;
+					height: 100%;
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					z-index: 99;
+
+					span {
+						display: flex;
+						justify-content: center;
+						align-items: center;
+						width: 60px;
+						height: 60px;
+						background: #ffffff66;
+						border-radius: 50%;
+
+						svg {
+							display: inline-block;
+							width: 24px;
+							height: 24px;
+							object-fit: contain;
+							transform: translateX(8%);
+						}
+
+						@media (max-width: 992px) {
+							width: 52px;
+							height: 52px;
+						}
+
+						@media (max-width: 768px) {
+							width: 45px;
+							height: 45px;
+						}
+					}
+				}
 			}
 		}
 

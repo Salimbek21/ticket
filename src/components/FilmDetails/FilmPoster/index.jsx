@@ -20,7 +20,7 @@ const months = [
 	"декабрь",
 ];
 
-const FilmPoster = ({ data1 }) => {
+const FilmPoster = ({ data1, data }) => {
 	console.log(data1, "Film details data 1 ");
 	const dispatch = useDispatch();
 	const [paymentModal, setPaymentModal] = useState(false);
@@ -143,7 +143,9 @@ const FilmPoster = ({ data1 }) => {
 					</div>
 				</div>
 			</div>
-			{paymentModal && <PaymentsModal onClose={handleCloseModal} />}
+			{paymentModal && (
+				<PaymentsModal data1={data1} data={data} onClose={handleCloseModal} />
+			)}
 		</div>
 	);
 };
