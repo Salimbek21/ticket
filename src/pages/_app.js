@@ -5,13 +5,12 @@ import { Provider } from "react-redux";
 import { ToastContainer } from "react-toastify";
 
 export default function App({ Component, pageProps }) {
-  return (
-    <Provider store={store}>
+	return (
+		<Provider store={store}>
 			<ToastContainer />
-
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-    </Provider>
-  );
+			<Layout>
+				<Component {...pageProps} />
+			</Layout>
+		</Provider>
+	);
 }

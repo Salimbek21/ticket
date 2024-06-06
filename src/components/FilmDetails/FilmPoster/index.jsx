@@ -22,19 +22,25 @@ const months = [
 
 const FilmPoster = ({ data1, data }) => {
 	console.log(data1, "Film details data 1 ");
+	console.log(data, "Film details data ");
 	const dispatch = useDispatch();
 	const [paymentModal, setPaymentModal] = useState(false);
+	const [selectedCinema, setSelectedCinema] = useState(null);
+	const [selectedSession, setSelectedSession] = useState(null);
 	const [dates, setDates] = useState([]);
 	const [selectedDate, setSelectedDate] = useState("Сегодня");
 	const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
-	const [films, setFilms] = useState([]);
 
-	const handleOpenModal = () => {
+	const handleOpenModal = (cinema, session) => {
+		setSelectedCinema(cinema);
+		setSelectedSession(session);
 		setPaymentModal(true);
 	};
 
 	const handleCloseModal = () => {
 		setPaymentModal(false);
+		setSelectedCinema(null);
+		setSelectedSession(null);
 	};
 
 	const handleDayClick = (day, monthIndex) => {
@@ -113,14 +119,18 @@ const FilmPoster = ({ data1, data }) => {
 				</div>
 				<div className={cls.film_poster_general}>
 					{data1.map((cinema, index) => (
-						<div className={cls.film_poster_info}>
+						<div className={cls.film_poster_info} key={index}>
 							<div className={cls.info_left}>
 								<div className={cls.cinema_name}>{cinema.name}</div>
 								<div className={cls.cinema_address}>{cinema.address}</div>
 							</div>
 							<div className={cls.info_right}>
 								{cinema.sessions.map((session, sessionIndex) => (
-									<div className={cls.right_card} onClick={handleOpenModal}>
+									<div
+										className={cls.right_card}
+										onClick={() => handleOpenModal(cinema, session)}
+										key={sessionIndex}
+									>
 										<div className={cls.card_top}>
 											<div className={cls.top_hall}>
 												<div className={cls.hall_num}>{session.hallName}</div>
@@ -144,7 +154,12 @@ const FilmPoster = ({ data1, data }) => {
 				</div>
 			</div>
 			{paymentModal && (
-				<PaymentsModal data1={data1} data={data} onClose={handleCloseModal} />
+				<PaymentsModal
+					data={selectedCinema}
+					dataImg={data}
+					session={selectedSession}
+					onClose={handleCloseModal}
+				/>
 			)}
 		</div>
 	);

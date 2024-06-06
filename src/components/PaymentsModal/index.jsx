@@ -1,47 +1,53 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import Image from "next/image";
+import Link from "next/link";
+import Seat from "./Seat";
 import {
 	CancelLogo,
 	ClickBlackIcon,
 	MinusIcon,
 	PaymeBlackIcon,
 	PlusIcon,
-	ScreenFullText,
 	ScreenIcon,
 } from "../svg";
 import cls from "./payments-modal.module.scss";
-import pandaImg from "/public/images/panda.jpeg";
-import Link from "next/link";
-import Seat from "./Seat";
 import { BASE_URL_IMAGE } from "@/api/url";
 
-const PaymentsModal = ({ onClose, data1, data }) => {
-	console.log(data, "data modal pop up test");
-	console.log(data1, "data1 modal pop up");
+const PaymentsModal = ({ onClose, data, session, dataImg }) => {
 	const [currentStep, setCurrentStep] = useState(1);
 	const [phoneNumber, setPhoneNumber] = useState("");
 	const [activeButton, setActiveButton] = useState(null);
-	const [seats, setSeats] = useState([
-		{ id: 1, status: "unoccupied" },
-		{ id: 2, status: "unoccupied" },
-		{ id: 3, status: "unoccupied" },
-		{ id: 4, status: "unoccupied" },
-		{ id: 5, status: "unoccupied" },
-		{ id: 6, status: "unoccupied" },
-		{ id: 7, status: "unoccupied" },
-		{ id: 8, status: "unoccupied" },
-		{ id: 9, status: "unoccupied" },
-		{ id: 10, status: "unoccupied" },
-		{ id: 11, status: "unoccupied" },
-		{ id: 12, status: "unoccupied" },
-		{ id: 13, status: "unoccupied" },
-		{ id: 14, status: "unoccupied" },
-		{ id: 15, status: "unoccupied" },
-		{ id: 16, status: "unoccupied" },
-		{ id: 17, status: "unoccupied" },
-		{ id: 18, status: "unoccupied" },
-		{ id: 19, status: "unoccupied" },
-	]);
+	const [seats, setSeats] = useState([]);
+
+	console.log(seats, "seats");
+
+	console.log(Seat);
+
+	useEffect(() => {
+		const fetchSeats = async () => {
+			try {
+				const response = await axios.get("/api/booking-sessions", {
+					params: { sessionId: session.filmSessionId },
+				});
+				console.log("API response data:", response.data);
+				const { sessionHallPlaces } = response.data.data;
+				const formattedSeats = sessionHallPlaces.map((place) => ({
+					id: `${place.rowNumber}-${place.placeNumber}`,
+					row: place.rowNumber,
+					number: place.placeNumber,
+					status: place.status === 0 ? "unoccupied" : "occupied",
+				}));
+				console.log("Formatted seats", formattedSeats);
+				setSeats(formattedSeats);
+			} catch (error) {
+				console.error("Error:", error);
+			}
+		};
+		fetchSeats();
+	}, [session.filmSessionId]);
+
+	console.log("Session ID:", session.filmSessionId);
 
 	const handleSeatClick = (id) => {
 		const updatedSeats = seats.map((seat) =>
@@ -97,31 +103,25 @@ const PaymentsModal = ({ onClose, data1, data }) => {
 				<div className={cls.cont}>
 					<div className={cls.main_info}>
 						<div className={cls.info}>
-							{data.trailers?.map((img, i) => (
+							{dataImg.trailers?.map((img, i) => (
 								<div className={cls.pic} key={i}>
 									<Image
 										src={`${BASE_URL_IMAGE}/${img?.picturePath}`}
-										alt={`${data.name} Image`}
+										alt={`${dataImg.name} Image`}
 										width={400}
 										height={400}
 									/>
 								</div>
 							))}
 							<div className={cls.text}>
-								<div className={cls.film_name}>{data.name}</div>
-								{data1?.map((item, i) => (
-									<div key={i} className={cls.text_info}>
-										<p>{item.name}</p>
-										<span></span>
-										{item.sessions.map((session, i) => (
-											<>
-												<p>{session.hallName}</p>
-												<span></span>
-												<p>{session.format}</p>
-											</>
-										))}
-									</div>
-								))}
+								<div className={cls.film_name}>{dataImg.name}</div>
+								<div className={cls.text_info}>
+									<p>{data.name}</p>
+									<span></span>
+									<p>{session.hallName}</p>
+									<span></span>
+									<p>{session.format}</p>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -131,10 +131,7 @@ const PaymentsModal = ({ onClose, data1, data }) => {
 				</div>
 				<div className={cls.seances}>
 					<Link href="#" className={`${cls.item} ${cls.active}`}>
-						<span>19:40</span>
-					</Link>
-					<Link href="#" className={cls.item}>
-						<span>22:15</span>
+						<span>{session.showTime}</span>
 					</Link>
 				</div>
 			</div>
@@ -160,20 +157,24 @@ const PaymentsModal = ({ onClose, data1, data }) => {
 							<ScreenIcon />
 						</div>
 						<div className={cls.seatCont}>
-							<div className={cls.seatLine}>
-								<div className={cls.line}>
-									{seats.map((seat) => (
-										<Seat
-											seat={seat}
-											key={seat.id}
-											className={`${cls.seat} ${
-												seat.status === "occupied" && cls.occupied
-											} ${seat.status === "unoccupied" && cls.unoccupied}`}
-											onClick={() => handleSeatClick(seat.id)}
-										></Seat>
-									))}
+							{[...new Set(seats.map((seat) => seat.row))].map((row) => (
+								<div className={cls.seatLine} key={row}>
+									<div className={cls.line}>
+										{seats
+											.filter((seat) => seat.row === row)
+											.map((seat) => (
+												<Seat
+													seat={seat}
+													key={seat.id}
+													className={`${cls.seat} ${
+														seat.status === "occupied" && cls.occupied
+													} ${seat.status === "unoccupied" && cls.unoccupied}`}
+													onClick={() => handleSeatClick(seat.id)}
+												/>
+											))}
+									</div>
 								</div>
-							</div>
+							))}
 						</div>
 						<div className={cls.zoom}>
 							<button className={cls.zoom_btn}>
@@ -266,40 +267,20 @@ const PaymentsModal = ({ onClose, data1, data }) => {
 									<div className={cls.text}>
 										Нажимая кнопку “Оплатить” Вы даете согласие на обработку
 										персональных данных и соглашаетесь с{" "}
-										<Link href="/offer.docx" download={"offer.docx"}>
-											Офертой
-										</Link>
+										<a href="#">офертой Click</a>
 									</div>
+									<button className={cls.btn}>Оплатить</button>
 								</div>
 							</div>
 						</div>
 					</div>
+					<div className={cls.payment_back}>
+						<button className={cls.btn_back} onClick={handlePreviousStep}>
+							Назад
+						</button>
+					</div>
 				</>
 			)}
-			<div className={cls.bottom}>
-				<div className={cls.cont}>
-					<div className={cls.info}>
-						<div className={cls.total}>
-							<span>Итого</span>
-							<span>0 сум</span>
-						</div>
-						<div className={cls.count}>
-							<span>0 билетов</span>
-							<span>Комиссия - 0 сум</span>
-						</div>
-					</div>
-					<div className={cls.delimeter}></div>
-					<button onClick={handleNextStep} className={cls.btn}>
-						Оформить
-					</button>
-				</div>
-				<div className={cls.bottom_phone}>
-					<Link href={"tel:+998712007735"}>
-						<span>Телефон для справок:</span>
-						<span>+998712007735</span>
-					</Link>
-				</div>
-			</div>
 		</div>
 	);
 };

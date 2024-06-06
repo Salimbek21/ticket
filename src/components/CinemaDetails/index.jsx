@@ -4,14 +4,14 @@ import CinemaMap from "./CinemaMap";
 import CinemaPoster from "./CinemaPoster";
 
 const CinemaDetails = ({ data }) => {
-  return (
-    <>
-      <CinemaHero data={data} />
-      <CinemaPoster data={data} />
-      <AboutCinema data={data} />
-      <CinemaMap data={data} />
-    </>
-  );
+	return (
+		<>
+			<CinemaHero data={data} />
+			<CinemaPoster data={data} />
+			<AboutCinema data={data} />
+			<CinemaMap data={data} />
+		</>
+	);
 };
 
 export default CinemaDetails;

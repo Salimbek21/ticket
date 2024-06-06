@@ -39,7 +39,7 @@ const Poster = () => {
 	const filmsData = useSelector((state) => state.films?.films);
 
 	useEffect(() => {
-		dispatch(filmsThunk({ index: 1, size: 10, date: "2024-04-22" }));
+		dispatch(filmsThunk({ index: 1, size: 10, date: "2024-06-06" }));
 		dispatch(cinemasThunk());
 		generateDates();
 	}, [dispatch]);
