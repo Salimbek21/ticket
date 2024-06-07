@@ -135,6 +135,8 @@
 		grid-template-rows: max-content 1fr;
 		width: 100%;
 		background: #f9f9f9;
+		overflow-y: scroll;
+		z-index: 5;
 
 		.tags {
 			display: flex;
@@ -195,6 +197,7 @@
 			padding-top: 20px;
 			margin-left: auto;
 			margin-right: auto;
+			margin-bottom: 20px;
 
 			span {
 				opacity: 0.4;
@@ -221,15 +224,74 @@
 				display: flex;
 				justify-content: center;
 				align-items: center;
-				padding: 30px;
+				padding: 10px;
 
 				.line {
 					width: 100%;
-					max-width: 450px;
+					max-width: max-content;
 					display: flex;
 					align-items: center;
-					flex-wrap: wrap;
+					margin-left: auto;
+					margin-right: auto;
 					gap: 15px;
+
+					.seat {
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						width: 32px;
+						height: 26px;
+						border-top-left-radius: 10px;
+						border-top-right-radius: 10px;
+						cursor: pointer;
+
+						&.unoccupiedSeat {
+							background-color: #0f131d;
+							opacity: 0.25;
+							transition: all 0.3s ease;
+						}
+
+						&.pendingSeat {
+							background-color: #f37905;
+						}
+
+						&.nonAvailableSeat {
+							width: 26px;
+							height: 26px;
+							background-color: #0f131d;
+							opacity: 0.1;
+							border-radius: 50%;
+							cursor: not-allowed;
+						}
+
+						.seatNum {
+							display: none;
+							font-size: 14px;
+							font-weight: 500;
+							line-height: 100%;
+							letter-spacing: 0em;
+							text-align: center;
+							color: #fff;
+
+							&:hover {
+								display: block;
+							}
+						}
+
+						&.unoccupiedSeat {
+							&:hover {
+								.seatNum {
+									display: block;
+								}
+							}
+						}
+
+						&.pendingSeat {
+							.seatNum {
+								display: block;
+							}
+						}
+					}
 				}
 			}
 		}
@@ -270,8 +332,9 @@
 			display: flex;
 			justify-content: center;
 			align-items: center;
+			gap: 5px;
 			position: absolute;
-			bottom: 10px;
+			bottom: -50px;
 			left: 0;
 			z-index: 1;
 			width: 100%;

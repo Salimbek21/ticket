@@ -109,7 +109,7 @@ const Premieres = () => {
 									<div className={cls.card_bottom}>
 										<div className={cls.bottom_name}>{item?.film?.name}</div>
 										<div className={cls.bottom_genres}>
-											<p>{item.film.genres}</p>
+											<p>{item.film.genres.join(" • ")}</p>
 										</div>
 										<div className={cls.bottom_time}>
 											{item?.film.premiereDateUzbekistan}
