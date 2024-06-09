@@ -85,7 +85,7 @@ const FilmPoster = ({ data1, data }) => {
 		generateDates();
 	}, []);
 
-	if (data1.length === 0) return <></>;
+	if (!data1.length) return null;
 
 	return (
 		<div className="container">

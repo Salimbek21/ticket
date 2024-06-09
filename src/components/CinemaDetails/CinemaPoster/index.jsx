@@ -1,57 +1,86 @@
+import { useState } from "react";
 import Image from "next/image";
 import cls from "./cinema-poster.module.scss";
-import pandaImg1 from "/public/images/panda1.jpg";
-import Link from "next/link";
+import PaymentsModalCinema from "@/components/PaymentsModal/PaymentsModalCinema";
 
-const CinemaPoster = ({ data }) => {
-	console.log(data, "Cinema poster data");
-	// console.log(data1, "Cinema poster data1");
+const CinemaPoster = ({ data, data1 }) => {
+	const [paymentModal, setPaymentModal] = useState(false);
+	const [selectedCinema, setSelectedCinema] = useState(null);
+	const [selectedSession, setSelectedSession] = useState(null);
+
+	const handleOpenModal = (cinema, session) => {
+		setSelectedCinema(cinema);
+		setSelectedSession(session);
+		setPaymentModal(true);
+	};
+
+	const handleCloseModal = () => {
+		setPaymentModal(false);
+		setSelectedCinema(null);
+		setSelectedSession(null);
+	};
+
+	if (!data1.length) return null;
 
 	return (
 		<div className="container">
 			<div className={cls.cinema_poster} id="poster">
 				<h2 className={cls.cinema_poster_header}>Афиша на сегодня</h2>
 				<div className={cls.cinema_poster_general}>
-					<div className={cls.cinema_poster_info}>
-						<div className={cls.info_left}>
-							<div className={cls.left_image}>
-								<Image src={pandaImg1} alt="Poster photo" />
-							</div>
-							<div className={cls.left_info}>
-								<div className={cls.left_name_top}>
-									<Link href="#" className={cls.left_name}>
-										{data.name}
-									</Link>
+					{data1.map((cinema) => (
+						<div key={cinema.id} className={cls.cinema_poster_info}>
+							<div className={cls.info_left}>
+								<div className={cls.left_image}>
+									<Image
+										src={cinema.poster}
+										width={400}
+										height={400}
+										alt={cinema.name}
+									/>
 								</div>
-								<div className={cls.left_genres}>
-									<p>Мультфильм</p>
-									<span></span>
-									<p>Фнатастика</p>
+								<div className={cls.left_info}>
+									<div className={cls.left_name_top}>
+										<div className={cls.left_name}>{cinema.name}</div>
+									</div>
+									<div className={cls.left_genres}>
+										<p>{cinema.genres?.join(" • ")}</p>
+									</div>
 								</div>
 							</div>
-						</div>
-						<div className={cls.info_right}>
-							{Array.from({ length: 7 }).map((_, index) => (
-								<Link href="#" className={cls.right_card}>
-									<div className={cls.card_top}>
-										<div className={cls.top_hall}>
-											<div className={cls.hall_num}>Зал 1</div>
+							<div className={cls.info_right}>
+								{cinema.sessions.map((session) => (
+									<div
+										className={cls.right_card}
+										key={session.sessionId}
+										onClick={() => handleOpenModal(cinema, session)}
+									>
+										<div className={cls.card_top}>
+											<div className={cls.top_hall}>
+												<div className={cls.hall_num}>{session.hallName}</div>
+											</div>
+											<div className={cls.hall_format}>{session.format}</div>
+											<div className={cls.hall_price}>
+												{session.ticketPrice} сум
+											</div>
 										</div>
-										<div className={cls.hall_format}>2D</div>
-										<div className={cls.hall_price}>60 000 сум</div>
+										<div className={cls.card_btn_time}>
+											<div className={cls.btn_time}>{session.showTime}</div>
+										</div>
 									</div>
-									<div className={cls.card_btn_time}>
-										<div className={cls.btn_time}>10:00</div>
-									</div>
-								</Link>
-							))}
+								))}
+							</div>
 						</div>
-					</div>
-					<div className={cls.cinema_poster_more_btn}>
-						<button className={cls.more_btn}>Показать еще</button>
-					</div>
+					))}
 				</div>
 			</div>
+			{paymentModal && (
+				<PaymentsModalCinema
+					data={selectedCinema}
+					dataImg={data}
+					session={selectedSession}
+					onClose={handleCloseModal}
+				/>
+			)}
 		</div>
 	);
 };

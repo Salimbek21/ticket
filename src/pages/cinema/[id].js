@@ -1,5 +1,4 @@
 import CinemaDetails from "@/components/CinemaDetails";
-import Layout from "@/components/layout";
 import axios from "axios";
 import { useRouter } from "next/router";
 
@@ -15,10 +14,12 @@ const CinemaDetailId = ({ data, data1 }) => {
 export const getServerSideProps = async (context) => {
 	try {
 		const baseURL = "http://185.196.213.181:32790/api/cinemas";
-		// const res1 = await axios.get(
-		// 	`${baseURL}/${context.query.id}/sessions?date=2024-06-08`
-		// );
-		// const data1 = res1.data.data;
+		const today = new Date().toISOString().split("T")[0];
+
+		const res1 = await axios.get(
+			`${baseURL}/${context.query.id}/sessions?index=1&size=10&date=${today}`
+		);
+		const data1 = res1.data.data.items;
 
 		const res = await axios.get(`${baseURL}/${context.query.id}`);
 		const data = res.data.data;
@@ -26,7 +27,7 @@ export const getServerSideProps = async (context) => {
 		return {
 			props: {
 				data: data || null,
-				// data1: data1 || null,
+				data1: data1 || null,
 			},
 		};
 	} catch (error) {
@@ -34,7 +35,7 @@ export const getServerSideProps = async (context) => {
 		return {
 			props: {
 				data: null,
-				// data1: null,
+				data1: null,
 			},
 		};
 	}

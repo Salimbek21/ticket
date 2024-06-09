@@ -2,7 +2,10 @@ import { useState, useEffect } from "react";
 import cls from "./poster.module.scss";
 import Link from "next/link";
 import Image from "next/image";
+import pandaImg from "/public/images/panda.jpeg";
+import pandaImg1 from "/public/images/panda1.jpg";
 import { ArrowDownIcon, ExclamationIcon } from "@/components/svg";
+import { cardInfo } from "@/mock/temporary-data";
 import { useDispatch, useSelector } from "react-redux";
 import { filmsThunk } from "@/store/films/filmsThunk";
 import { cinemasThunk } from "@/store/cinemas/cinemasThunk";
@@ -25,11 +28,10 @@ const months = [
 
 const Poster = () => {
 	const [dates, setDates] = useState([]);
-	const [selectedDate, setSelectedDate] = useState(
-		new Date().toISOString().split("T")[0]
-	);
+	const [selectedDate, setSelectedDate] = useState("Сегодня");
 	const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
 	const [openDropdown, setOpenDropdown] = useState(false);
+	const [selectedItemId, setSelectedItemId] = useState(null);
 	const [selectedCinema, setSelectedCinema] = useState(null);
 
 	const dispatch = useDispatch();
@@ -37,20 +39,10 @@ const Poster = () => {
 	const filmsData = useSelector((state) => state.films?.films);
 
 	useEffect(() => {
+		dispatch(filmsThunk({ index: 1, size: 10, date: "2024-06-08" }));
 		dispatch(cinemasThunk());
 		generateDates();
 	}, [dispatch]);
-
-	useEffect(() => {
-		dispatch(
-			filmsThunk({
-				index: 1,
-				size: 10,
-				date: selectedDate,
-				cinemaId: selectedCinema ? selectedCinema.id : null,
-			})
-		);
-	}, [dispatch, selectedDate, selectedCinema]);
 
 	const generateDates = () => {
 		const today = new Date();
@@ -85,28 +77,25 @@ const Poster = () => {
 		setOpenDropdown(!openDropdown);
 	};
 
-	const handleCinemaSelect = (cinema) => {
-		setSelectedCinema(cinema);
+	const handleItemClick = (id) => {
+		if (id === selectedItemId) {
+			setSelectedItemId(null);
+		} else {
+			setSelectedItemId(id);
+		}
+
+		setOpenDropdown(false);
+	};
+
+	const handleCinemaSelect = (cinemaName) => {
+		setSelectedCinema(cinemaName);
+		dispatch(filmsThunk({ cinemaName, date: "2024-06-08" }));
+
 		setOpenDropdown(false);
 	};
 
 	const handleDayClick = (day, monthIndex) => {
-		let selectedDate;
-
-		if (day === "Сегодня") {
-			selectedDate = new Date().toISOString().split("T")[0];
-		} else if (day === "Завтра") {
-			const tomorrow = new Date();
-			tomorrow.setDate(tomorrow.getDate() + 1);
-			selectedDate = tomorrow.toISOString().split("T")[0];
-		} else {
-			const today = new Date();
-			const daysAhead = parseInt(day) - today.getDate();
-			const selected = new Date(today.setDate(today.getDate() + daysAhead));
-			selectedDate = selected.toISOString().split("T")[0];
-		}
-
-		setSelectedDate(selectedDate);
+		setSelectedDate(day);
 		setSelectedMonth(monthIndex);
 	};
 
@@ -114,27 +103,17 @@ const Poster = () => {
 		return date === "Сегодня" || date === "Завтра";
 	};
 
-	const getPosterHeader = () => {
-		if (selectedDate === new Date().toISOString().split("T")[0]) {
-			return "Афиша на Сегодня";
-		} else if (
-			selectedDate ===
-			new Date(new Date().setDate(new Date().getDate() + 1))
-				.toISOString()
-				.split("T")[0]
-		) {
-			return "Афиша на Завтра";
-		} else {
-			return `Афиша на ${selectedDate.split("-")[2]} ${months[selectedMonth]}`;
-		}
-	};
-
 	return (
 		<div className="container">
 			<div className={cls.poster} id="poster">
 				<div className={cls.poster_top}>
 					<div className={cls.poster_top_info}>
-						<h2 className={cls.poster_header}>{getPosterHeader()}</h2>
+						<h2 className={cls.poster_header}>
+							Афиша на{" "}
+							{!isTodayOrTomorrow(selectedDate)
+								? `${selectedDate} ${months[selectedMonth]}`
+								: selectedDate}
+						</h2>
 						<div
 							className={
 								cls.poster_choice + " " + (openDropdown ? cls.opened : "")
@@ -146,28 +125,15 @@ const Poster = () => {
 							</button>
 							{openDropdown && (
 								<ul className={cls.cinema_list}>
-									<li
-										className={`${cls.item} ${
-											selectedCinema === null ? cls.active : ""
-										}`}
-									>
-										<button
-											onClick={() => handleCinemaSelect(null)}
-											className={cls.btn}
-										>
-											<span className={cls.checkbox}></span>
-											<span className={cls.cinema_name}>Все</span>
-										</button>
-									</li>
 									{cinemaData?.cinemas?.map((item) => (
 										<li
 											key={item.id}
 											className={`${cls.item} ${
-												selectedCinema?.name === item.name ? cls.active : ""
+												selectedCinema === item.name ? cls.active : ""
 											}`}
 										>
 											<button
-												onClick={() => handleCinemaSelect(item)}
+												onClick={() => handleCinemaSelect(item.name)}
 												className={cls.btn}
 											>
 												<span className={cls.checkbox}></span>
@@ -184,7 +150,7 @@ const Poster = () => {
 							{dates.map((day, index) => (
 								<div key={index} className={cls.day_box}>
 									<button
-										className={`${cls.day} ${
+										className={`${cls.day}  ${
 											selectedDate === day.date ? cls.selected : ""
 										}`}
 										onClick={() => handleDayClick(day.date, day.monthIndex)}
@@ -204,8 +170,10 @@ const Poster = () => {
 					</div>
 				</div>
 				<div className={cls.poster_cards}>
-					{filmsData?.items?.length > 0 ? (
-						filmsData.items.map((item) => (
+					{selectedCinema && filmsData?.items?.length > 0 ? (
+						<div className={cls.no_movie}>С этим сеансом не найдено</div>
+					) : (
+						filmsData.items?.map((item) => (
 							<Link
 								className={cls.poster_card}
 								key={item.id}
@@ -226,6 +194,7 @@ const Poster = () => {
 								</div>
 								<div className={cls.card_bottom}>
 									<div className={cls.bottom_name}>{item.name}</div>
+
 									<div className={cls.bottom_genres}>
 										<p>{item.genres.join(" • ")}</p>
 									</div>
@@ -240,8 +209,6 @@ const Poster = () => {
 								</div>
 							</Link>
 						))
-					) : (
-						<div className={cls.no_movie}>С этим сеансом не найдено</div>
 					)}
 				</div>
 			</div>

@@ -465,47 +465,15 @@
 			}
 
 			.btn {
-				.btn_item1 {
-					width: 100%;
-					display: flex;
-					justify-content: center;
-					align-items: center;
-					font-size: 16px;
-					font-weight: 600;
-					line-height: 16px;
-					letter-spacing: 0em;
-					padding-top: 15px;
-					padding-bottom: 15px;
-					color: #fff;
-					border-radius: 6px;
-					background: #f37905;
-
-					&.disabled {
-						opacity: 0.4;
-						pointer-events: none;
-					}
-				}
-
-				.btn_item2 {
-					width: 100%;
-					display: flex;
-					justify-content: center;
-					align-items: center;
-					font-size: 16px;
-					font-weight: 600;
-					line-height: 16px;
-					letter-spacing: 0em;
-					padding-top: 15px;
-					padding-bottom: 15px;
-					color: #fff;
-					border-radius: 6px;
-					background: #f37905;
-
-					&.disabled {
-						opacity: 0.4;
-						pointer-events: none;
-					}
-				}
+				font-size: 16px;
+				font-weight: 600;
+				line-height: 16px;
+				letter-spacing: 0em;
+				padding-top: 15px;
+				padding-bottom: 15px;
+				color: #fff;
+				border-radius: 6px;
+				background: #f37905;
 			}
 		}
 
@@ -860,7 +828,7 @@
 				}
 
 				.btn {
-					display: flex;
+					display: block;
 					width: 100%;
 					font-size: 13px;
 					padding-top: 12px;

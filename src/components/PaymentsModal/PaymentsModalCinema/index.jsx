@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import Image from "next/image";
-import Link from "next/link";
+
 import {
 	CancelLogo,
 	ClickBlackIcon,
@@ -9,12 +8,17 @@ import {
 	PlusIcon,
 	PaymeBlackIcon,
 	ScreenIcon,
-} from "../svg";
-import cls from "./payments-modal.module.scss";
+} from "@/components/svg";
+
+import cls from "./payments-modal-cinema.module.scss";
 import { BASE_URL_IMAGE } from "@/api/url";
 import { apiGetSession, apiGetSeatDetails } from "@/api/sessionApi";
+import Link from "next/link";
+import Image from "next/image";
 
-const PaymentsModal = ({ onClose, data, session, dataImg }) => {
+const PaymentsModalCinema = ({ onClose, data, session, dataImg }) => {
+	console.log(dataImg, "dataImg");
+	console.log(data, "data");
 	const [currentStep, setCurrentStep] = useState(1);
 	const [phoneNumber, setPhoneNumber] = useState("");
 	const [activeButton, setActiveButton] = useState(null);
@@ -138,7 +142,7 @@ const PaymentsModal = ({ onClose, data, session, dataImg }) => {
 	const formatPhoneNumber = (inputPhoneNumber) => {
 		const phoneNumberOnlyDigits = inputPhoneNumber.replace(/\D/g, "");
 		let formattedPhoneNumber = "";
-		for (let i = 0; i < phoneNumberOnlyDigits.length && i < 9; i++) {
+		for (let i = 0; i < phoneNumberOnlyDigits.length && i < 10; i++) {
 			if (i === 2 || i === 5 || i === 7) {
 				formattedPhoneNumber += " ";
 			}
@@ -163,9 +167,6 @@ const PaymentsModal = ({ onClose, data, session, dataImg }) => {
 	const commissionPerTicket = 5000;
 	const totalCommission = selectedSeats.length * commissionPerTicket;
 
-	const isSubmitDisabled =
-		currentStep === 2 && !(phoneNumber.length === 12 && activeButton);
-
 	return (
 		<div className={cls.paymentsModal_wrapper}>
 			{/* Agar kotta ekranda ham o'rindiqlar joylashuvi o'rtada emas, tepada joylansin deyilsa. Ushbu va style'dagi holatda kommentdan chiqarilib qo'yiladi */}
@@ -174,20 +175,18 @@ const PaymentsModal = ({ onClose, data, session, dataImg }) => {
 				<div className={cls.cont}>
 					<div className={cls.main_info}>
 						<div className={cls.info}>
-							{dataImg.trailers?.map((img, i) => (
-								<div className={cls.pic} key={i}>
-									<Image
-										src={`${BASE_URL_IMAGE}/${img?.picturePath}`}
-										alt={`${dataImg.name} Image`}
-										width={400}
-										height={400}
-									/>
-								</div>
-							))}
+							<div className={cls.pic}>
+								<Image
+									src={`${BASE_URL_IMAGE}/${data?.poster}`}
+									alt={`${dataImg.name} Image`}
+									width={400}
+									height={400}
+								/>
+							</div>
 							<div className={cls.text}>
-								<div className={cls.film_name}>{dataImg.name}</div>
+								<div className={cls.film_name}>{data.name}</div>
 								<div className={cls.text_info}>
-									<p>{data.name}</p>
+									<p>{dataImg.name}</p>
 									<span></span>
 									<p>{session.hallName}</p>
 									<span></span>
@@ -201,9 +200,9 @@ const PaymentsModal = ({ onClose, data, session, dataImg }) => {
 					</button>
 				</div>
 				<div className={cls.seances}>
-					<div className={`${cls.item} ${cls.active}`}>
+					<Link href="#" className={`${cls.item} ${cls.active}`}>
 						<span>{session.showTime}</span>
-					</div>
+					</Link>
 				</div>
 			</div>
 			{currentStep === 1 && (
@@ -305,7 +304,7 @@ const PaymentsModal = ({ onClose, data, session, dataImg }) => {
 												<p>Место {seat.number}</p>
 											</span>
 											<span className={cls.price}>
-												{formatCurrency(ticketPrice)} сум
+												{formatCurrency(ticketPrice + totalCommission)} сум
 											</span>
 											<button
 												className={cls.btn_close}
@@ -388,29 +387,9 @@ const PaymentsModal = ({ onClose, data, session, dataImg }) => {
 						</div>
 					</div>
 					<div className={cls.delimeter}></div>
-					<div className={cls.btn}>
-						{currentStep === 1 ? (
-							<button
-								className={`${cls.btn_item1} ${
-									selectedSeats.length === 0 ? cls.disabled : ""
-								}`}
-								disabled={selectedSeats.length === 0}
-								onClick={handleNextStep}
-							>
-								Оформить
-							</button>
-						) : (
-							<button
-								className={`${cls.btn_item2} ${
-									isSubmitDisabled ? cls.disabled : ""
-								}`}
-								disabled={isSubmitDisabled}
-								onClick={handleNextStep}
-							>
-								Оплатить
-							</button>
-						)}
-					</div>
+					<button onClick={handleNextStep} className={cls.btn}>
+						{currentStep === 1 ? "Оформить" : "Оплатить"}
+					</button>
 				</div>
 				<div className={cls.bottom_phone}>
 					<Link href={"tel:+998712007735"}>
@@ -423,4 +402,4 @@ const PaymentsModal = ({ onClose, data, session, dataImg }) => {
 	);
 };
 
-export default PaymentsModal;
+export default PaymentsModalCinema;

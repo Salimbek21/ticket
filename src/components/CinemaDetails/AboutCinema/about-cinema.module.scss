@@ -211,6 +211,31 @@
 						}
 					}
 				}
+
+				@media (max-width: 380px) {
+					.lists_item {
+						padding: 15px;
+					}
+				}
+
+				@media (max-width: 350px) {
+					.lists_item {
+						width: 100%;
+						min-width: 250px;
+
+						.lists_item_visual {
+							transform: scale(0.8);
+						}
+					}
+				}
+
+				@media (max-width: 340px) {
+					.lists_item {
+						.lists_item_visual {
+							transform: scale(0.6);
+						}
+					}
+				}
 			}
 		}
 	}
