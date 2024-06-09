@@ -25,6 +25,8 @@ const Premieres = () => {
 		(state) => state.premierMoviesWeekly.premierMovie
 	);
 
+	console.log(weeklyMovie, "weeklyMovie");
+
 	return (
 		<div className="container">
 			<div className={cls.premieres}>
@@ -85,7 +87,7 @@ const Premieres = () => {
 									href={{
 										pathname: "/film/[id]",
 									}}
-									as={`/film/${item.id}`}
+									as={`/film/${item.film.id}`}
 									title={item?.film?.name}
 								>
 									<div className={cls.card_top}>

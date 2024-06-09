@@ -23,6 +23,29 @@ const PaymentsModal = ({ onClose, data, session, dataImg }) => {
 	const [seatDetails, setSeatDetails] = useState([]);
 	const [ticketPrice, setTicketPrice] = useState(0);
 
+	const [zoomLevel, setZoomLevel] = useState(1);
+
+	useEffect(() => {
+		const handleResize = () => {
+			const screenWidth = window.innerWidth;
+			if (screenWidth >= 0) {
+				setZoomLevel(0.7);
+			}
+
+			if (screenWidth >= 768) {
+				setZoomLevel(1);
+			}
+		};
+
+		handleResize();
+
+		window.addEventListener("resize", handleResize);
+
+		return () => {
+			window.removeEventListener("resize", handleResize);
+		};
+	}, []);
+
 	const MAX_SELECTION = 5;
 
 	useEffect(() => {
@@ -56,7 +79,7 @@ const PaymentsModal = ({ onClose, data, session, dataImg }) => {
 		if (seat.status === 2) return;
 
 		if (seat.status === 0 && selectedSeats.length >= MAX_SELECTION) {
-			alert("Вы можете выбрать не более 5 мест");
+			alert("Нельзя выбрать больше 5 мест за одну сессию");
 			return;
 		}
 
@@ -124,12 +147,26 @@ const PaymentsModal = ({ onClose, data, session, dataImg }) => {
 		return formattedPhoneNumber;
 	};
 
-	const totalAmount = selectedSeats.length * ticketPrice;
+	const handleZoomIn = () => {
+		setZoomLevel((prevZoomLevel) => Math.min(prevZoomLevel + 0.1, 1.5));
+	};
 
-	const commission = totalAmount * 0;
+	const handleZoomOut = () => {
+		setZoomLevel((prevZoomLevel) => Math.max(prevZoomLevel - 0.1, 0.5));
+	};
+
+	const formatCurrency = (amount) => {
+		return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	};
+
+	const totalAmount = selectedSeats.length * ticketPrice;
+	const commissionPerTicket = 5000;
+	const totalCommission = selectedSeats.length * commissionPerTicket;
 
 	return (
 		<div className={cls.paymentsModal_wrapper}>
+			{/* Agar kotta ekranda ham o'rindiqlar joylashuvi o'rtada emas, tepada joylansin deyilsa. Ushbu va style'dagi holatda kommentdan chiqarilib qo'yiladi */}
+			{/* <div className={cls.data_top}> */}
 			<div className={cls.head}>
 				<div className={cls.cont}>
 					<div className={cls.main_info}>
@@ -168,7 +205,7 @@ const PaymentsModal = ({ onClose, data, session, dataImg }) => {
 			</div>
 			{currentStep === 1 && (
 				<>
-					<div className={cls.places}>
+					<div className={cls.innerWrapper}>
 						<div className={cls.tags}>
 							<div className={cls.item}>
 								<span className={cls.empty}></span>
@@ -183,44 +220,52 @@ const PaymentsModal = ({ onClose, data, session, dataImg }) => {
 								<span>Недоступно</span>
 							</div>
 						</div>
-						<div className={cls.screen_cont}>
-							<span>Экран</span>
-							<ScreenIcon />
-						</div>
-						<div className={cls.seatCont}>
-							{[...new Set(seats.map((seat) => seat.row))].map((row) => (
-								<div className={cls.seatLine} key={row}>
-									<div className={cls.line}>
-										{seats
-											.filter((seat) => seat.row === row)
-											.map((seat) => (
-												<div
-													key={seat.id}
-													className={`${cls.seat} ${
-														seat.status === 1 && cls.pendingSeat
-													} ${seat.status === 2 && cls.nonAvailableSeat} ${
-														seat.status === 0 && cls.unoccupiedSeat
-													}`}
-													onClick={() => handleSeatClick(seat.id)}
-													style={{
-														cursor:
-															seat.status === 2 ? "not-allowed" : "pointer",
-													}}
-												>
-													<span className={cls.seatNum}>{seat.number}</span>
-												</div>
-											))}
-									</div>
+						<div className={cls.places}>
+							<div
+								className={cls.seatCont}
+								style={{
+									transform: `scale(${zoomLevel})`,
+									transformOrigin: "top center",
+								}}
+							>
+								<div className={cls.screen_cont}>
+									<span>Экран</span>
+									<ScreenIcon />
 								</div>
-							))}
-						</div>
-						<div className={cls.zoom}>
-							<button className={cls.zoom_btn}>
-								<PlusIcon />
-							</button>
-							<button className={cls.zoom_btn}>
-								<MinusIcon />
-							</button>
+								{[...new Set(seats.map((seat) => seat.row))].map((row) => (
+									<div className={cls.seatLine} key={row}>
+										<div className={cls.line}>
+											{seats
+												.filter((seat) => seat.row === row)
+												.map((seat) => (
+													<div
+														key={seat.id}
+														className={`${cls.seat} ${
+															seat.status === 1 && cls.pendingSeat
+														} ${seat.status === 2 && cls.nonAvailableSeat} ${
+															seat.status === 0 && cls.unoccupiedSeat
+														}`}
+														onClick={() => handleSeatClick(seat.id)}
+														style={{
+															cursor:
+																seat.status === 2 ? "not-allowed" : "pointer",
+														}}
+													>
+														<span className={cls.seatNum}>{seat.number}</span>
+													</div>
+												))}
+										</div>
+									</div>
+								))}
+							</div>
+							<div className={cls.zoom}>
+								<button className={cls.zoom_btn} onClick={handleZoomIn}>
+									<PlusIcon />
+								</button>
+								<button className={cls.zoom_btn} onClick={handleZoomOut}>
+									<MinusIcon />
+								</button>
+							</div>
 						</div>
 						<div className={cls.chosen}>
 							{selectedSeats.map((seat) => (
@@ -256,7 +301,9 @@ const PaymentsModal = ({ onClose, data, session, dataImg }) => {
 												<span></span>
 												<p>Место {seat.number}</p>
 											</span>
-											<span className={cls.price}>{ticketPrice} сум</span>
+											<span className={cls.price}>
+												{formatCurrency(ticketPrice + totalCommission)} сум
+											</span>
 											<button
 												className={cls.btn_close}
 												onClick={() => handleSeatClick(seat.id)}
@@ -324,16 +371,17 @@ const PaymentsModal = ({ onClose, data, session, dataImg }) => {
 					</div>
 				</>
 			)}
+			{/* </div> */}
 			<div className={cls.bottom}>
 				<div className={cls.cont}>
 					<div className={cls.info}>
 						<div className={cls.total}>
 							<span>Итого</span>
-							<span>{totalAmount} сум</span>
+							<span>{formatCurrency(totalAmount + totalCommission)} сум</span>
 						</div>
 						<div className={cls.count}>
 							<span>{selectedSeats.length} билетов</span>
-							<span>Комиссия - {commission} сум</span>
+							<span>Комиссия - {formatCurrency(totalCommission)} сум</span>
 						</div>
 					</div>
 					<div className={cls.delimeter}></div>

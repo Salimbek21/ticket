@@ -9,14 +9,12 @@ const FilmDetailId = ({ data, data1 }) => {
   return <FilmDetails data={data} data1={data1} />;
 };
 
-// GET => /api/booking-sessions
-
 export const getServerSideProps = async (context) => {
   try {
     const baseURL = "http://185.196.213.181:32790/api/films";
 
     const res1 = await axios.get(
-      `${baseURL}/${context.query.id}/sessions?date=2024-06-06`
+      `${baseURL}/${context.query.id}/sessions?date=2024-06-08`
     );
     const data1 = res1.data.data;
 

@@ -21,7 +21,7 @@ const months = [
 ];
 
 const FilmPoster = ({ data1, data }) => {
-	console.log(data1, "Film details data 1 ");
+	console.log(data1, "Film details data 1 poster");
 	console.log(data, "Film details data ");
 	const dispatch = useDispatch();
 	const [paymentModal, setPaymentModal] = useState(false);
@@ -84,6 +84,8 @@ const FilmPoster = ({ data1, data }) => {
 
 		generateDates();
 	}, []);
+
+	if (data1.length === 0) return <></>;
 
 	return (
 		<div className="container">

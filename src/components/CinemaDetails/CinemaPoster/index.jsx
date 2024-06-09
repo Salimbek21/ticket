@@ -3,7 +3,10 @@ import cls from "./cinema-poster.module.scss";
 import pandaImg1 from "/public/images/panda1.jpg";
 import Link from "next/link";
 
-const CinemaPoster = () => {
+const CinemaPoster = ({ data }) => {
+	console.log(data, "Cinema poster data");
+	// console.log(data1, "Cinema poster data1");
+
 	return (
 		<div className="container">
 			<div className={cls.cinema_poster} id="poster">
@@ -17,7 +20,7 @@ const CinemaPoster = () => {
 							<div className={cls.left_info}>
 								<div className={cls.left_name_top}>
 									<Link href="#" className={cls.left_name}>
-										Kung fu panda 1
+										{data.name}
 									</Link>
 								</div>
 								<div className={cls.left_genres}>
