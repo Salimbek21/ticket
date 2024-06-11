@@ -1,12 +1,26 @@
 import FilmDetails from "@/components/FilmDetails";
+import SEO from "@/components/SEO";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 
 const FilmDetailId = ({ data, data1 }) => {
 	const router = useRouter();
 
-	return <FilmDetails data={data} data1={data1} />;
+	const seoTitle = data.name;
+	const seoDescription = data.name + " " + data.announce;
+	const seoKeywords =
+		"film, cinema, KinoTicket, movie details, kino detallari, kinolar, kino, multfilmlar, biletlar, yangiliklar";
+
+	return (
+		<>
+			<SEO
+				title={seoTitle}
+				description={seoDescription}
+				keywords={seoKeywords}
+			/>
+			<FilmDetails data={data} data1={data1} />
+		</>
+	);
 };
 
 export const getServerSideProps = async (context) => {

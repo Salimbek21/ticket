@@ -5,15 +5,15 @@ import Premieres from "./Premieres";
 import ReleasedSoon from "./ReleasedSoon";
 
 const Home = () => {
-  return (
-    <>
-      <Hero />
-      <Poster />
-      <Premieres />
-      <ReleasedSoon />
-      <Cinemas />
-    </>
-  );
+	return (
+		<>
+			<Hero />
+			<Poster />
+			<Premieres />
+			<ReleasedSoon />
+			<Cinemas />
+		</>
+	);
 };
 
 export default Home;

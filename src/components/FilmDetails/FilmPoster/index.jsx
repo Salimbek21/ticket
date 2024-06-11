@@ -28,7 +28,9 @@ const FilmPoster = ({ data1, data }) => {
 	const [selectedCinema, setSelectedCinema] = useState(null);
 	const [selectedSession, setSelectedSession] = useState(null);
 	const [dates, setDates] = useState([]);
-	const [selectedDate, setSelectedDate] = useState("Сегодня");
+	const [selectedDate, setSelectedDate] = useState(
+		new Date().toISOString().split("T")[0]
+	);
 	const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
 
 	const handleOpenModal = (cinema, session) => {
@@ -43,13 +45,9 @@ const FilmPoster = ({ data1, data }) => {
 		setSelectedSession(null);
 	};
 
-	const handleDayClick = (day, monthIndex) => {
-		setSelectedDate(day);
+	const handleDayClick = (date, monthIndex) => {
+		setSelectedDate(date);
 		setSelectedMonth(monthIndex);
-	};
-
-	const isTodayOrTomorrow = (date) => {
-		return date === "Сегодня" || date === "Завтра";
 	};
 
 	useEffect(() => {
@@ -64,13 +62,14 @@ const FilmPoster = ({ data1, data }) => {
 				const dayOfWeek = daysOfWeek[date.getDay()];
 				const formattedDate = date.getDate().toString().padStart(2, "0");
 				const monthIndex = date.getMonth();
-				const formattedMonth = months[monthIndex];
+				const isoDate = date.toISOString().split("T")[0]; // ISO formatda saqlash
 
 				const displayDate =
 					i === 0 ? `Сегодня` : i === 1 ? `Завтра` : `${formattedDate}`;
 
 				const dayInfo = {
-					date: displayDate,
+					date: isoDate,
+					displayDate: displayDate,
 					dayOfWeek: dayOfWeek,
 					monthIndex: monthIndex,
 					isHighlighted: dayOfWeek === "Сб" || dayOfWeek === "Вс",
@@ -85,6 +84,14 @@ const FilmPoster = ({ data1, data }) => {
 		generateDates();
 	}, []);
 
+	const isTodayOrTomorrow = (date) => {
+		const today = new Date().toISOString().split("T")[0];
+		const tomorrow = new Date();
+		tomorrow.setDate(new Date().getDate() + 1);
+		const isoTomorrow = tomorrow.toISOString().split("T")[0];
+		return date === today || date === isoTomorrow;
+	};
+
 	if (!data1.length) return null;
 
 	return (
@@ -93,20 +100,22 @@ const FilmPoster = ({ data1, data }) => {
 				<h2 className={cls.film_poster_header}>
 					Афиша на{" "}
 					{!isTodayOrTomorrow(selectedDate)
-						? `${selectedDate} ${months[selectedMonth]}`
-						: selectedDate}
+						? `${selectedDate.split("-")[2]} ${months[selectedMonth]}`
+						: selectedDate === new Date().toISOString().split("T")[0]
+						? "Сегодня"
+						: "Завтра"}
 				</h2>
 				<div className={cls.daysContainer}>
 					<div className={cls.days_calendar}>
 						{dates.map((day, index) => (
 							<div key={index} className={cls.day_box}>
 								<button
-									className={`${cls.day}  ${
+									className={`${cls.day} ${
 										selectedDate === day.date ? cls.selected : ""
 									}`}
 									onClick={() => handleDayClick(day.date, day.monthIndex)}
 								>
-									<div className={cls.day_date}>{day.date}</div>
+									<div className={cls.day_date}>{day.displayDate}</div>
 									<div
 										className={`${cls.day_week} ${
 											day.isHighlighted ? cls.highlighted : ""

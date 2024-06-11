@@ -30,7 +30,7 @@ const AboutFilm = ({ data }) => {
 						</div>
 						<div className={cls.table_item}>
 							<div className={cls.item_key}>Страны</div>
-							<div className={cls.item_value}>США</div>
+							<div className={cls.item_value}>-</div>
 						</div>
 						<div className={cls.table_item}>
 							<div className={cls.item_key}>Жанры</div>
@@ -45,6 +45,18 @@ const AboutFilm = ({ data }) => {
 							<div className={cls.item_value}>
 								{`${data.duration} мин. / ${formatDuration(data.duration)}`}
 							</div>
+						</div>
+						<div className={cls.table_item}>
+							<div className={cls.item_key}>Рейтинг MPAA</div>
+							<div className={cls.item_value}>{data.ratingMPAA}</div>
+						</div>
+						<div className={cls.table_item}>
+							<div className={cls.item_key}>Бюджет</div>
+							<div className={cls.item_value}>{data.boxOfficeWorldWide}</div>
+						</div>
+						<div className={cls.table_item}>
+							<div className={cls.item_key}>Слоган</div>
+							<div className={cls.item_value}>{data.tagLine}</div>
 						</div>
 					</div>
 					<div className={cls.film_content_actors}>

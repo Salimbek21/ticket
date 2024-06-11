@@ -64,12 +64,14 @@ const Poster = () => {
 			const formattedDate = date.getDate().toString().padStart(2, "0");
 			const monthIndex = date.getMonth();
 			const formattedMonth = months[monthIndex];
+			const isoDate = date.toISOString().split("T")[0]; // ISO formatda saqlash
 
 			const displayDate =
 				i === 0 ? `Сегодня` : i === 1 ? `Завтра` : `${formattedDate}`;
 
 			const dayInfo = {
-				date: displayDate,
+				date: isoDate, // ISO formatda saqlash
+				displayDate: displayDate,
 				dayOfWeek: dayOfWeek,
 				monthIndex: monthIndex,
 				isHighlighted: dayOfWeek === "Сб" || dayOfWeek === "Вс",
@@ -79,15 +81,6 @@ const Poster = () => {
 		}
 
 		setDates(next7Days);
-	};
-
-	const handleToggleDropdown = () => {
-		setOpenDropdown(!openDropdown);
-	};
-
-	const handleCinemaSelect = (cinema) => {
-		setSelectedCinema(cinema);
-		setOpenDropdown(false);
 	};
 
 	const handleDayClick = (day, monthIndex) => {
@@ -108,6 +101,15 @@ const Poster = () => {
 
 		setSelectedDate(selectedDate);
 		setSelectedMonth(monthIndex);
+	};
+
+	const handleToggleDropdown = () => {
+		setOpenDropdown(!openDropdown);
+	};
+
+	const handleCinemaSelect = (cinema) => {
+		setSelectedCinema(cinema);
+		setOpenDropdown(false);
 	};
 
 	const isTodayOrTomorrow = (date) => {
@@ -187,9 +189,11 @@ const Poster = () => {
 										className={`${cls.day} ${
 											selectedDate === day.date ? cls.selected : ""
 										}`}
-										onClick={() => handleDayClick(day.date, day.monthIndex)}
+										onClick={() =>
+											handleDayClick(day.displayDate, day.monthIndex)
+										}
 									>
-										<div className={cls.day_date}>{day.date}</div>
+										<div className={cls.day_date}>{day.displayDate}</div>
 										<div
 											className={`${cls.day_week} ${
 												day.isHighlighted ? cls.highlighted : ""

@@ -1,14 +1,26 @@
 import CinemaDetails from "@/components/CinemaDetails";
+import SEO from "@/components/SEO";
 import axios from "axios";
 import { useRouter } from "next/router";
 
 const CinemaDetailId = ({ data, data1 }) => {
 	const router = useRouter();
-	const pageTitle = data?.name;
-	const pageDescription = `Details and information about ${data?.name}.`;
-	const pageKeywords = `${data?.name}, cinema, movies, film information`;
 
-	return <CinemaDetails data={data} data1={data1} />;
+	const seoTitle = data ? data.name : "Loading...";
+	const seoDescription = data ? data.description : "Loading cinema details...";
+	const seoKeywords =
+		"cinema, KinoTicket, movie details, kino detallari, kinolar, kino, multfilmlar, biletlar, yangiliklar, kino";
+
+	return (
+		<>
+			<SEO
+				title={seoTitle}
+				description={seoDescription}
+				keywords={seoKeywords}
+			/>
+			<CinemaDetails data={data} data1={data1} />
+		</>
+	);
 };
 
 export const getServerSideProps = async (context) => {
@@ -31,7 +43,7 @@ export const getServerSideProps = async (context) => {
 			},
 		};
 	} catch (error) {
-		console.error("Error fetching film data:", error);
+		console.error("Error fetching cinema data:", error);
 		return {
 			props: {
 				data: null,
