@@ -16,6 +16,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { sliders } from "@/store/slider/sliderThunk";
 
 const Hero = () => {
+  const baseUrl = process.env.NEXT_PUBLIC_IMAGE_BASE_URL;
   const dispatch = useDispatch();
   const slidersData = useSelector((state) => state.slider.sliders);
   useEffect(() => {
@@ -98,7 +99,7 @@ const Hero = () => {
                 <div className={cls.cover_item_top}>
                   <div className={cls.cover_item_top_pic}>
                     <Image
-                      src={`http://185.196.213.181:32790${item?.trailer?.picturePath}`}
+                      src={`${baseUrl}${item?.trailer?.picturePath}`}
                       layout="fill"
                       alt="Movie banner"
                     />
